@@ -37,3 +37,12 @@ type Category struct {
 	CreatedAt  time.Time `json:"createdAt"`
 	UpdatedAt  time.Time `json:"updatedAt"`
 }
+
+// Config struct
+type Config struct {
+	Username string `env:"USERNAME"`
+	Password  string `env:"PASSWORD,unset"`
+	Port  string `env:"PORT" envDefault:"3306"`
+	Host string `env:"HOST"`
+	DBName string `env:"DBNAME"`
+}
