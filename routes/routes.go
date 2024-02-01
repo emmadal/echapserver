@@ -6,6 +6,7 @@ import "github.com/gin-gonic/gin"
 func RegisterRoutes(server *gin.Engine) {
 
 	server.GET("/categories", getCategories)
+	server.GET("/category/:id", getCategoryByID)
 	server.POST("/category", createCategory)
 
 }

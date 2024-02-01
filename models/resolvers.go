@@ -35,3 +35,16 @@ func CreateCategory(category Category) error {
 
 	return err
 }
+
+// GetCategoryByID update a category
+func GetCategoryByID(categoryID int64) (*Category, error) {
+	query := `SELECT * FROM category WHERE ID = ?`
+	rows := db.DB.QueryRow(query, categoryID)
+	var category Category
+
+	err := rows.Scan(&category.ID, &category.Title, &category.CreatedAt)
+	if err != nil {
+		return nil, err
+	}
+	return &category, nil
+}
