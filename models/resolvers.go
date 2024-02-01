@@ -58,3 +58,13 @@ func UpdateCategory(category Category) error {
 	_, err = stmt.Exec(category.Title, category.ID)
 	return err
 }
+
+// DeleteCategory delete a category
+func DeleteCategory(categoryID int64) error {
+	query := `DELETE FROM category WHERE ID = ?`
+	stmt, err := db.DB.Prepare(query)
+	defer stmt.Close()
+
+	_, err = stmt.Exec(categoryID)
+	return err
+}

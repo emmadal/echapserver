@@ -110,3 +110,37 @@ func updateCategory(context *gin.Context) {
 		"message": "Category updated",
 	})
 }
+
+func deleteCategory(context *gin.Context) {
+	// convert id parameter into int64
+	id := context.Param("id")
+	categoryID, err := strconv.ParseInt(id, 10, 64)
+	if err != nil {
+		context.JSON(http.StatusBadRequest, gin.H{
+			"message": "Could not parse category ID",
+			"success": false,
+		})
+		return
+	}
+	// verify is the category exist in the database
+	_, err =  models.GetCategoryByID(categoryID)
+	if err != nil {
+		context.JSON(http.StatusNotFound, gin.H{
+			"message": "Unable to find category data", 
+			"success": false,
+		})
+		return
+	}
+	err = models.DeleteCategory(categoryID)
+	if err != nil {
+		context.JSON(http.StatusInternalServerError, gin.H{
+			"message": "Unable to delete category", 
+			"success": false,
+		})
+		return
+	}
+	context.JSON(http.StatusOK, gin.H{
+		"success": true,
+		"message": "Category deleted",
+	})
+}
