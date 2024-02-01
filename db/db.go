@@ -42,7 +42,7 @@ func parseEnv() (credentials string) {
 	password := os.Getenv("PASSWORD")
 	dbName := os.Getenv("DBNAME")
 	host := os.Getenv("HOST")
-	credentials = fmt.Sprintf("%v:%v@tcp(%v:3306)/%v", username, password, host, dbName)
+	credentials = fmt.Sprintf("%v:%v@tcp(%v:3306)/%v?parseTime=true", username, password, host, dbName)
 	return
 }
 
@@ -58,15 +58,13 @@ func createTales() {
 			whatsapp TEXT,
 			tiktok TEXT,
 			instagram TEXT,
-			created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-			updated_at DATETIME ON UPDATE CURRENT_TIMESTAMP
+			created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 		)`,
 	
 		`CREATE TABLE IF NOT EXISTS category (
 			id INTEGER NOT NULL PRIMARY KEY AUTO_INCREMENT,
 			title VARCHAR(50) NOT NULL,
-			created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-			updated_at DATETIME ON UPDATE CURRENT_TIMESTAMP
+			created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 		)`,
 
 		`CREATE TABLE IF NOT EXISTS article (
@@ -81,8 +79,7 @@ func createTales() {
 			FOREIGN KEY (author_id) REFERENCES users(id),
 			category_id INTEGER NOT NULL,
 			FOREIGN KEY (category_id) REFERENCES category(id),
-			created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-			updated_at DATETIME ON UPDATE CURRENT_TIMESTAMP
+			created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 		)`,
 	}
 	for _, value := range queries {

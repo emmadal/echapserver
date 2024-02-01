@@ -11,12 +11,12 @@ func GetAllCategories() ([]Category, error) {
 	}
 	var categories []Category
 	for rows.Next() {
-		var category Category
-		err := rows.Scan(&category.ID, &category.Title, &category.CreatedAt, &category.UpdatedAt)
+		var cat Category
+		err := rows.Scan(&cat.ID, &cat.Title, &cat.CreatedAt)
 		if err != nil {
 			return nil, err
 		}
-		categories = append(categories, category)
+		categories = append(categories, cat)
 	}
 	return categories, nil
 }

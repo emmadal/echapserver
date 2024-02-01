@@ -1,6 +1,6 @@
-POST http://localhost:8080/article
+POST http://localhost:8080/category
 Content-Type: application/json
 
 {
-    "title": "Fashion"
+    "title": "Games & Consoles"
 }

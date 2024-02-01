@@ -27,15 +27,13 @@ type User struct {
 	TikTok    string    `json:"tiktok"`
 	Instagram string    `json:"instagram"`
 	CreatedAt time.Time `json:"createdAt"`
-	UpdatedAt time.Time `json:"updatedAt"`
 }
 
 // Category struct
 type Category struct {
-	ID        int64     `json:"id"`
-	Title     string    `json:"title" binding:"required"`
+	ID        int64  `json:"id"`
+	Title     string `json:"title" binding:"required"`
 	CreatedAt time.Time `json:"createdAt"`
-	UpdatedAt time.Time `json:"updatedAt"`
 }
 
 // Config struct

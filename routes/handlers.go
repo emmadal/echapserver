@@ -10,7 +10,7 @@ func getCategories(context *gin.Context) {
 	categories, err := models.GetAllCategories()
 	if err != nil {
 		context.JSON(http.StatusInternalServerError, gin.H{
-			"message": err,
+			"message": err.Error(),
 			"success": false,
 		})
 		return

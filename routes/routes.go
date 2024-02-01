@@ -5,7 +5,7 @@ import "github.com/gin-gonic/gin"
 // RegisterRoutes register all of the routes that are needed by the application.
 func RegisterRoutes(server *gin.Engine) {
 
-	server.GET("/article", getCategories)
-	server.POST("/article", createCategory)
+	server.GET("/categories", getCategories)
+	server.POST("/category", createCategory)
 
 }
