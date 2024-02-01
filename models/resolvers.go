@@ -36,7 +36,7 @@ func CreateCategory(category Category) error {
 	return err
 }
 
-// GetCategoryByID update a category
+// GetCategoryByID get a category
 func GetCategoryByID(categoryID int64) (*Category, error) {
 	query := `SELECT * FROM category WHERE ID = ?`
 	rows := db.DB.QueryRow(query, categoryID)
@@ -47,4 +47,14 @@ func GetCategoryByID(categoryID int64) (*Category, error) {
 		return nil, err
 	}
 	return &category, nil
+}
+
+// UpdateCategory update a category
+func UpdateCategory(category Category) error {
+	query := `UPDATE category SET title = ? WHERE id = ?`
+	stmt, err := db.DB.Prepare(query)
+	defer stmt.Close()
+
+	_, err = stmt.Exec(category.Title, category.ID)
+	return err
 }

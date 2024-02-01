@@ -1,2 +1,2 @@
-GET http://localhost:8080/category/3
+GET http://localhost:8080/category/2
 Content-Type: application/json
