@@ -76,9 +76,13 @@ func createTales() {
 			banner TEXT NOT NULL,
 			photos JSON,
 			author_id  INTEGER NOT NULL,
-			FOREIGN KEY (author_id) REFERENCES users(id),
+			FOREIGN KEY (author_id) REFERENCES users(id) 
+			ON UPDATE CASCADE
+			ON DELETE CASCADE,
 			category_id INTEGER NOT NULL,
-			FOREIGN KEY (category_id) REFERENCES category(id),
+			FOREIGN KEY (category_id) REFERENCES category(id) 
+			ON UPDATE CASCADE
+			ON DELETE CASCADE,
 			created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 		)`,
 	}

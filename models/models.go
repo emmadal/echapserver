@@ -43,4 +43,7 @@ type Config struct {
 	Port     string `env:"PORT" envDefault:"3306"`
 	Host     string `env:"HOST"`
 	DBName   string `env:"DBNAME"`
+	CloudName   string `env:"CloudName"`
+	CloudSecret string `env:"CloudSecret"`
+	CloudAPIKey string `env:"CloudAPIKey"`
 }
