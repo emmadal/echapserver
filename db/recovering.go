@@ -15,8 +15,8 @@ func recoverTable() {
 		fmt.Println("CANNOT CREATE TABLE:", err)
 	}
 }
-
-func recoverEnv() {
+// RecoverEnv defer error when .env file is not found
+func RecoverEnv() {
 	err := recover()
 	if err != nil {
 		fmt.Println("Unable to load .env file:", err)

@@ -16,7 +16,7 @@ var DB *sql.DB
 func InitDB() {
 	defer recoverDB()
 
-	credentials := parseEnv()
+	credentials := parseDBEnv()
 	db, err := sql.Open("mysql", credentials)
 	DB = db
 
@@ -32,8 +32,8 @@ func InitDB() {
 	go createTales()
 }
 
-func parseEnv() (credentials string) {
-	defer recoverEnv()
+func parseDBEnv() (credentials string) {
+	defer RecoverEnv()
 
 	if err := godotenv.Load(".env"); err != nil {
 		panic(err)

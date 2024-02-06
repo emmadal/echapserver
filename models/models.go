@@ -46,4 +46,5 @@ type Config struct {
 	CloudName   string `env:"CloudName"`
 	CloudSecret string `env:"CloudSecret"`
 	CloudAPIKey string `env:"CloudAPIKey"`
+	CloudFolder string `env:"CloudFolder"`
 }
