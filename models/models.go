@@ -20,8 +20,8 @@ type Article struct {
 type User struct {
 	ID        int64     `json:"id"`
 	Name      string    `json:"name" binding:"required"`
-	Biography string    `json:"biography" binding:"required"`
-	Premium   bool      `json:"premium" binding:"required"`
+	Biography string    `json:"biography"`
+	Premium   bool      `json:"premium"`
 	Phone     string    `json:"phone" binding:"required"`
 	Whatsapp  string    `json:"whatsapp"`
 	TikTok    string    `json:"tiktok"`

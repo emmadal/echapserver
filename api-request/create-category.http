@@ -2,5 +2,5 @@ POST http://localhost:8080/category
 Content-Type: application/json
 
 {
-    "title": "BIZZI"
+    "title": "Téléphones & Tablettes"
 }

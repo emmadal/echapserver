@@ -68,3 +68,23 @@ func DeleteCategory(categoryID int64) error {
 	_, err = stmt.Exec(categoryID)
 	return err
 }
+
+// CreateUser create user
+func CreateUser (user User) error {
+	query := "INSERT INTO users (name, phone) VALUES (?,?)"
+	stmt, err := db.DB.Prepare(query)
+	defer stmt.Close()
+	if err != nil {
+		return err
+	}
+	result, err := stmt.Exec(user.Name, user.Phone)
+	if err != nil {
+		return err
+	}
+	userID, err := result.LastInsertId()
+	if err != nil {
+		return err
+	}
+	user.ID = userID
+	return nil
+}

@@ -52,19 +52,21 @@ func createTales() {
 		`CREATE TABLE IF NOT EXISTS users (
 			id INTEGER NOT NULL PRIMARY KEY AUTO_INCREMENT,
 			name VARCHAR(60) NOT NULL,
-			biography TEXT NOT NULL,
+			biography VARCHAR(255),
 			premium TINYINT DEFAULT 0 NOT NULL,
 			phone VARCHAR(10) NOT NULL,
-			whatsapp TEXT,
+			whatsapp VARCHAR(10),
 			tiktok TEXT,
 			instagram TEXT,
-			created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+			created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+			UNIQUE(phone)
 		)`,
 	
 		`CREATE TABLE IF NOT EXISTS category (
 			id INTEGER NOT NULL PRIMARY KEY AUTO_INCREMENT,
 			title VARCHAR(50) NOT NULL,
-			created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+			created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+			UNIQUE(title)
 		)`,
 
 		`CREATE TABLE IF NOT EXISTS article (

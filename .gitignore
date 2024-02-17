@@ -21,6 +21,8 @@ _test
 _testmain.go
 .env
 
+/api-request
+
 /VERSION.cache
 /bin/
 /build.out
