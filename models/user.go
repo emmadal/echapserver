@@ -1,6 +1,9 @@
 package models
 
-import "oblackserver/db"
+import (
+	"database/sql"
+	"oblackserver/db"
+)
 
 // CreateUser create user
 func CreateUser(user User) error {
@@ -26,11 +29,22 @@ func CreateUser(user User) error {
 func LoginUser(u AuthStruct) (*User, error) {
 	query := "SELECT * FROM users WHERE phone = ?"
 	row := db.DB.QueryRow(query, u.Phone)
+
+	var biography, whatsapp, tiktok, instagram sql.NullString
+
 	var user User
-	err := row.Scan(&user.ID, &user.Name, &user.Biography, &user.Premium, &user.Phone, &user.Whatsapp, &user.TikTok, &user.Instagram, &user.CreatedAt)
+	err := row.Scan(&user.ID, &user.Name, &biography, &user.Premium, &user.Phone, &whatsapp, &tiktok, &instagram, &user.CreatedAt)
+
+	if biography.Valid && whatsapp.Valid && tiktok.Valid && instagram.Valid {
+		user.Biography = ""
+		user.Whatsapp = ""
+		user.TikTok = ""
+		user.Instagram = ""
+	}
 
 	if err != nil {
 		return nil, err
 	}
+
 	return &user, nil
 }
