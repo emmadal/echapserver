@@ -45,3 +45,13 @@ func EnvCloudFolder() string {
 	cloudFolder := os.Getenv("CloudFolder")
 	return cloudFolder
 }
+
+// EnvSecretKey return the secret key
+func EnvSecretKey() string {
+	defer db.RecoverEnv()
+	if err := godotenv.Load(".env"); err != nil {
+		panic(err)
+	}
+	secret := os.Getenv("Secret_Key")
+	return secret
+}
