@@ -31,20 +31,36 @@ type User struct {
 
 // Category struct
 type Category struct {
-	ID        int64  `json:"id"`
-	Title     string `json:"title" binding:"required"`
+	ID        int64     `json:"id"`
+	Title     string    `json:"title" binding:"required"`
+	UserID    int64     `json:"user_id" binding:"required"`
 	CreatedAt time.Time `json:"createdAt"`
 }
 
 // Config struct
 type Config struct {
-	Username string `env:"USERNAME"`
-	Password string `env:"PASSWORD,unset"`
-	Port     string `env:"PORT" envDefault:"3306"`
-	Host     string `env:"HOST"`
-	DBName   string `env:"DBNAME"`
+	Username    string `env:"USERNAME"`
+	Password    string `env:"PASSWORD,unset"`
+	Port        string `env:"PORT" envDefault:"3306"`
+	Host        string `env:"HOST"`
+	DBName      string `env:"DBNAME"`
 	CloudName   string `env:"CloudName"`
 	CloudSecret string `env:"CloudSecret"`
 	CloudAPIKey string `env:"CloudAPIKey"`
 	CloudFolder string `env:"CloudFolder"`
+}
+
+// AuthStruct struct
+type AuthStruct struct {
+	Phone string `json:"phone" binding:"required"`
+}
+
+// OTP struct
+type OTP struct {
+	ID         int64     `json:"id"`
+	Code       string    `json:"code" binding:"required"`
+	IsUsed     bool      `json:"is_used"`
+	UserID     int64     `json:"user_id" binding:"required"`
+	Expiration time.Time `json:"expiration"`
+	CreatedAt  time.Time `json:"createdAt"`
 }
