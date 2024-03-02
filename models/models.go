@@ -60,7 +60,12 @@ type OTP struct {
 	ID         int64     `json:"id"`
 	Code       string    `json:"code" binding:"required"`
 	IsUsed     bool      `json:"is_used"`
-	UserID     int64     `json:"user_id" binding:"required"`
 	Expiration time.Time `json:"expiration"`
+	UserID     int64     `json:"user_id" binding:"required"`
 	CreatedAt  time.Time `json:"createdAt"`
+}
+
+// OTPAuth struct
+type OTPAuth struct {
+	Code string `json:"code"`
 }
