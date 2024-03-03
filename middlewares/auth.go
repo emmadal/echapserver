@@ -1,15 +1,16 @@
 package middlewares
 
 import (
-	"github.com/gin-gonic/gin"
 	"net/http"
 	"oblackserver/helpers"
+	"github.com/gin-gonic/gin"
 )
 
 // Authenticate is a middleware for authorization
 func Authenticate(context *gin.Context) {
-	token := context.Request.Header.Get("Authorization")
-	if token == "" {
+	token, err := context.Cookie("tkauth")
+
+	if err != nil || token == "" {
 		context.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
 			"message": "No token provided",
 		})
