@@ -2,7 +2,6 @@ package routes
 
 import (
 	"net/http"
-	"oblackserver/helpers"
 	"oblackserver/models"
 	"strconv"
 
@@ -179,27 +178,5 @@ func deleteCategory(context *gin.Context) {
 	context.SecureJSON(http.StatusOK, gin.H{
 		"success": true,
 		"message": "Category deleted",
-	})
-}
-
-func uploadImage(context *gin.Context) {
-	header, err := context.FormFile("file") // return the first file for the provided form key.
-
-	if err != nil {
-		context.JSON(http.StatusBadRequest, gin.H{"message": err.Error(), "success": false})
-		return
-	}
-	url, err := helpers.UploadHelper(header) 
-	if err != nil {
-		context.JSON(http.StatusInternalServerError, gin.H{
-			"message": "Failed to open uploaded file", 
-			"success": false,
-		})
-		return;
-	}
-	context.JSON(http.StatusOK, gin.H{
-		"message": "file uploaded", 
-		"success": true,
-		"data": url,
 	})
 }
