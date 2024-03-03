@@ -1,7 +1,6 @@
 package routes
 
 import (
-	"fmt"
 	"net/http"
 	"oblackserver/helpers"
 	"oblackserver/models"
@@ -71,8 +70,9 @@ func login(context *gin.Context) {
 		Expiration: time.Now().Add(time.Minute * 2), // expires in 2 minutes from now
 		UserID:     user.ID,
 	}
-	fmt.Println(otpObject)
-	err = models.SaveOTPCode(otpObject) // save the otp to database
+	
+	// save the otp to database
+	err = models.SaveOTPCode(otpObject) 
 	if err != nil {
 		context.SecureJSON(http.StatusInternalServerError, gin.H{
 			"message": "Could not generate otp code",
