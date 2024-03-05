@@ -17,6 +17,7 @@ func RegisterRoutes(server *gin.Engine) {
 	authenticated.POST("/upload", uploadImage)
 	authenticated.POST("/otp-verification", verifyOTP)
 	authenticated.GET("/user/:id", getUserByID)
+	authenticated.GET("/otp", getOTP)
 
 
 	server.GET("/categories", getCategories)
