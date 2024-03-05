@@ -5,7 +5,7 @@ import (
 	"strconv"
 )
 
-const maxNum = 6
+const maxNum = 5
 
 func sliceNumToString(num []int) string {
 	var result string
