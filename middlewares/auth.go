@@ -12,7 +12,7 @@ func Authenticate(context *gin.Context) {
 
 	if err != nil || token == "" {
 		context.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
-			"message": "No token provided",
+			"message": "Unauthorized",
 		})
 		return
 	}

@@ -16,6 +16,8 @@ func RegisterRoutes(server *gin.Engine) {
 	authenticated.DELETE("/category/:id", deleteCategory)
 	authenticated.POST("/upload", uploadImage)
 	authenticated.POST("/otp-verification", verifyOTP)
+	authenticated.GET("/user/:id", getUserByID)
+
 
 	server.GET("/categories", getCategories)
 	server.GET("/category/:id", getCategoryByID)
