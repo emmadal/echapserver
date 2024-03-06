@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"time"
+
 	_ "github.com/go-sql-driver/mysql" // mysql driver
 	"github.com/joho/godotenv"
 )
@@ -49,22 +50,51 @@ func parseDBEnv() (credentials string) {
 func createTales() {
 	defer recoverTable()
 	queries := []string{
+		`CREATE TABLE IF NOT EXISTS country (
+			id INTEGER NOT NULL PRIMARY KEY AUTO_INCREMENT,
+			label VARCHAR(100) NOT NULL,
+			value VARCHAR(100) NOT NULL,
+			created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+			UNIQUE(label, value)
+		)`,
+
+		`CREATE TABLE IF NOT EXISTS city (
+			id INTEGER NOT NULL PRIMARY KEY AUTO_INCREMENT,
+			label VARCHAR(100) NOT NULL,
+			value VARCHAR(100) NOT NULL,
+			country_id INTEGER NOT NULL,
+			FOREIGN KEY (country_id) REFERENCES country(id) 
+			ON UPDATE CASCADE
+			ON DELETE CASCADE,
+			created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+			UNIQUE(label, value)
+		)`,
+
 		`CREATE TABLE IF NOT EXISTS users (
 			id INTEGER NOT NULL PRIMARY KEY AUTO_INCREMENT,
-			name VARCHAR(60) NOT NULL,
+			name VARCHAR(100) NOT NULL,
 			biography VARCHAR(255),
 			premium TINYINT DEFAULT 0 NOT NULL,
 			phone VARCHAR(15) NOT NULL,
+			country_id INTEGER NOT NULL,
+			city_id INTEGER NOT NULL,
+			photo TEXT,
 			whatsapp VARCHAR(15),
 			tiktok TEXT,
 			instagram TEXT,
+			FOREIGN KEY (city_id) REFERENCES city(id) 
+			ON UPDATE CASCADE
+			ON DELETE CASCADE,
+			FOREIGN KEY (country_id) REFERENCES country(id) 
+			ON UPDATE CASCADE
+			ON DELETE CASCADE,
 			created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 			UNIQUE(phone)
 		)`,
-	
+
 		`CREATE TABLE IF NOT EXISTS category (
 			id INTEGER NOT NULL PRIMARY KEY AUTO_INCREMENT,
-			title VARCHAR(50) NOT NULL,
+			title VARCHAR(100) NOT NULL,
 			user_id INTEGER NOT NULL,
 			FOREIGN KEY (user_id) REFERENCES users(id) 
 			ON UPDATE CASCADE
@@ -73,9 +103,21 @@ func createTales() {
 			UNIQUE(title)
 		)`,
 
+		`CREATE TABLE IF NOT EXISTS billing (
+			id INTEGER NOT NULL PRIMARY KEY AUTO_INCREMENT,
+			label VARCHAR(255) NOT NULL,
+			price INTEGER NOT NULL,
+			user_id INTEGER NOT NULL,
+			FOREIGN KEY (user_id) REFERENCES users(id) 
+			ON UPDATE CASCADE
+			ON DELETE CASCADE,
+			payment_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+			created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+		)`,
+
 		`CREATE TABLE IF NOT EXISTS article (
 			id INTEGER NOT NULL PRIMARY KEY AUTO_INCREMENT,
-			title VARCHAR(60) NOT NULL,
+			title VARCHAR(255) NOT NULL,
 			description TEXT NOT NULL,
 			price INTEGER NOT NULL,
 			phone VARCHAR(15) NOT NULL,
@@ -89,12 +131,20 @@ func createTales() {
 			FOREIGN KEY (category_id) REFERENCES category(id) 
 			ON UPDATE CASCADE
 			ON DELETE CASCADE,
+			country_id INTEGER NOT NULL,
+			FOREIGN KEY (country_id) REFERENCES country(id) 
+			ON UPDATE CASCADE
+			ON DELETE CASCADE,
+			city_id INTEGER NOT NULL,
+			FOREIGN KEY (city_id) REFERENCES city(id) 
+			ON UPDATE CASCADE
+			ON DELETE CASCADE,
 			created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 		)`,
-		
+
 		`CREATE TABLE IF NOT EXISTS otp (
 			id INTEGER NOT NULL PRIMARY KEY AUTO_INCREMENT,
-			code VARCHAR(10) NOT NULL,
+			code VARCHAR(7) NOT NULL,
 			is_used TINYINT DEFAULT 0 NOT NULL,
 			expiration TIMESTAMP,
 			user_id INTEGER NOT NULL,

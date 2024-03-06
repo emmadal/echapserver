@@ -13,7 +13,9 @@ type Article struct {
 	Photos      []string  `json:"photos" binding:"required"`
 	AuthorID    int64     `json:"author_id" binding:"required"`
 	CategoryID  int64     `json:"category_id" binding:"required"`
-	CreatedAt   time.Time `json:"createdAt"`
+	CountryID   int64     `json:"country_id" binding:"required"`
+	CityID      int64     `json:"city_id" binding:"required"`
+	CreatedAt   time.Time `json:"created_at"`
 }
 
 // User struct
@@ -23,10 +25,30 @@ type User struct {
 	Biography string    `json:"biography"`
 	Premium   bool      `json:"premium"`
 	Phone     string    `json:"phone" binding:"required"`
+	CountryID int64     `json:"country_id"`
+	CityID    int64     `json:"city_id"`
+	Photo     string    `json:"photo"`
 	Whatsapp  string    `json:"whatsapp"`
 	TikTok    string    `json:"tiktok"`
 	Instagram string    `json:"instagram"`
-	CreatedAt time.Time `json:"createdAt"`
+	CreatedAt time.Time `json:"created_at"`
+}
+
+// Country struct
+type Country struct {
+	ID        int64     `json:"id"`
+	Label     string    `json:"label" binding:"required"`
+	Value     string    `json:"value" binding:"required"`
+	CreatedAt time.Time `json:"created_at"`
+}
+
+// City struct
+type City struct {
+	ID        int64     `json:"id"`
+	Label     string    `json:"label" binding:"required"`
+	Value     string    `json:"value" binding:"required"`
+	CountryID int64     `json:"country_id" binding:"required"`
+	CreatedAt time.Time `json:"created_at"`
 }
 
 // Category struct
@@ -34,7 +56,17 @@ type Category struct {
 	ID        int64     `json:"id"`
 	Title     string    `json:"title" binding:"required"`
 	UserID    int64     `json:"user_id" binding:"required"`
-	CreatedAt time.Time `json:"createdAt"`
+	CreatedAt time.Time `json:"created_at"`
+}
+
+// Billing struct
+type Billing struct {
+	ID          int64     `json:"id"`
+	Label       string    `json:"label" binding:"required"`
+	Price       int64     `json:"price" binding:"required"`
+	UserID      int64     `json:"user_id" binding:"required"`
+	PaymentDate time.Time `json:"payment_date"`
+	CreatedAt   time.Time `json:"created_at"`
 }
 
 // Config struct
@@ -62,7 +94,7 @@ type OTP struct {
 	IsUsed     bool      `json:"is_used"`
 	Expiration time.Time `json:"expiration"`
 	UserID     int64     `json:"user_id" binding:"required"`
-	CreatedAt  time.Time `json:"createdAt"`
+	CreatedAt  time.Time `json:"created_at"`
 }
 
 // OTPAuth struct
