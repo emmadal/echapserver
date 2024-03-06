@@ -38,7 +38,6 @@ type User struct {
 type Country struct {
 	ID        int64     `json:"id"`
 	Label     string    `json:"label" binding:"required"`
-	Value     string    `json:"value" binding:"required"`
 	CreatedAt time.Time `json:"created_at"`
 }
 
@@ -46,7 +45,6 @@ type Country struct {
 type City struct {
 	ID        int64     `json:"id"`
 	Label     string    `json:"label" binding:"required"`
-	Value     string    `json:"value" binding:"required"`
 	CountryID int64     `json:"country_id" binding:"required"`
 	CreatedAt time.Time `json:"created_at"`
 }
