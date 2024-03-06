@@ -25,8 +25,8 @@ type User struct {
 	Biography string    `json:"biography"`
 	Premium   bool      `json:"premium"`
 	Phone     string    `json:"phone" binding:"required"`
-	CountryID int64     `json:"country_id"`
-	CityID    int64     `json:"city_id"`
+	CountryID int64     `json:"country_id" binding:"required"`
+	CityID    int64     `json:"city_id" binding:"required"`
 	Photo     string    `json:"photo"`
 	Whatsapp  string    `json:"whatsapp"`
 	TikTok    string    `json:"tiktok"`
