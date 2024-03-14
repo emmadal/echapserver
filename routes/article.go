@@ -22,18 +22,10 @@ func createArticle(context *gin.Context) {
 		return
 	}
 
-	if err != nil {
-		context.SecureJSON(http.StatusInternalServerError, gin.H{
-			"message": err.Error(), 
-			"success": false,
-		})
-		return
-	}
-
 	err = models.CreateArticle(article)
 	if err != nil {
 		context.SecureJSON(http.StatusInternalServerError, gin.H{
-			"message": err.Error(), 
+			"message": "Something went wrong", 
 			"success": false,
 		})
 		return
