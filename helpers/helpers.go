@@ -55,3 +55,13 @@ func EnvSecretKey() string {
 	secret := os.Getenv("Secret_Key")
 	return secret
 }
+
+// EnvDomainNameKey return the domain name
+func EnvDomainNameKey() string {
+	defer db.RecoverEnv()
+	if err := godotenv.Load(".env"); err != nil {
+		panic(err)
+	}
+	secret := os.Getenv("DomainName")
+	return secret
+}

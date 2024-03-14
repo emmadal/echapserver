@@ -45,8 +45,8 @@ func login(context *gin.Context) {
 
 	user, err := models.LoginUser(auth)
 	if err != nil {
-		context.SecureJSON(http.StatusInternalServerError, gin.H{
-			"message": "No user found with provided credentials.",
+		context.SecureJSON(http.StatusNotFound, gin.H{
+			"message": "No user found with provided credentials",
 			"success": false,
 		})
 		return
@@ -56,7 +56,7 @@ func login(context *gin.Context) {
 	token, err := helpers.CreateToken(user.ID, user.Phone)
 	if err != nil {
 		context.SecureJSON(http.StatusInternalServerError, gin.H{
-			"message": "Could not generate user token",
+			"message": "Unable to satisfy your request",
 			"success": false,
 		})
 		return
@@ -66,7 +66,8 @@ func login(context *gin.Context) {
 	_, err = context.Cookie("tkauth")
 	if err != nil {
 		maxAge := 2 * 60 * 60
-		context.SetCookie("tkauth", token, maxAge, "/", "localhost", false, true)
+		domain := helpers.EnvDomainNameKey()
+		context.SetCookie("tkauth", token, maxAge, "/", domain, false, true)
 	}
 
 	user, _ = models.FindUserByID(user.ID)

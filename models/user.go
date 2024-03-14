@@ -33,7 +33,7 @@ func LoginUser(u AuthStruct) (*User, error) {
 	var biography, whatsapp, photo, tiktok, instagram sql.NullString
 
 	var user User
-	err := row.Scan(&user.ID, &user.Name, &biography, &user.Premium, &user.Phone, &photo, &whatsapp, &tiktok, &instagram, &user.CreatedAt)
+	err := row.Scan(&user.ID, &user.Name, &biography, &user.Premium, &user.Phone, &user.CountryID, &user.CityID, &photo, &whatsapp, &tiktok, &instagram, &user.CreatedAt)
 
 	if biography.Valid && whatsapp.Valid && tiktok.Valid && instagram.Valid {
 		user.Biography = ""
