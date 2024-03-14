@@ -18,6 +18,8 @@ func RegisterRoutes(server *gin.Engine) {
 	authenticated.POST("/otp-verification", verifyOTP)
 	authenticated.GET("/user/:id", getUserByID)
 	authenticated.GET("/otp", getOTP)
+	authenticated.POST("/article", createArticle)
+
 
 
 	server.GET("/categories", getCategories)

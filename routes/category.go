@@ -47,7 +47,7 @@ func createCategory(context *gin.Context) {
 
 	context.SecureJSON(http.StatusOK, gin.H{
 		"success": true,
-		"message": "Article created successfully",
+		"message": "Category created successfully",
 	})
 
 }

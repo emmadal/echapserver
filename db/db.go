@@ -120,7 +120,7 @@ func createTales() {
 			price INTEGER NOT NULL,
 			phone VARCHAR(15) NOT NULL,
 			banner TEXT NOT NULL,
-			photos JSON,
+			photos JSON NOT NULL,
 			author_id  INTEGER NOT NULL,
 			FOREIGN KEY (author_id) REFERENCES users(id) 
 			ON UPDATE CASCADE
