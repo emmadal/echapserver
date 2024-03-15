@@ -19,6 +19,7 @@ func RegisterRoutes(server *gin.Engine) {
 	authenticated.GET("/user/:id", getUserByID)
 	authenticated.GET("/otp", getOTP)
 	authenticated.POST("/article", createArticle)
+	authenticated.GET("/logout/:id", signOut)
 
 
 

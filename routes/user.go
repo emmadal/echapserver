@@ -5,15 +5,19 @@ import (
 	"oblackserver/helpers"
 	"oblackserver/models"
 	"strconv"
+
 	"github.com/gin-gonic/gin"
 )
+
+var domain = helpers.EnvDomainNameKey()
+var mode = helpers.EnvMode()
 
 func register(context *gin.Context) {
 	var user models.User
 	err := context.ShouldBindJSON(&user)
 	if err != nil {
 		context.SecureJSON(http.StatusBadRequest, gin.H{
-			"message": "Invalid credentials",
+			"message": "Bad Request",
 			"success": false,
 		})
 		return
@@ -67,7 +71,7 @@ func login(context *gin.Context) {
 	if err != nil {
 		maxAge := 2 * 60 * 60
 		domain := helpers.EnvDomainNameKey()
-		context.SetCookie("tkauth", token, maxAge, "/", domain, false, true)
+		context.SetCookie("tkauth", token, maxAge, "/", domain, mode, true)
 	}
 
 	user, _ = models.FindUserByID(user.ID)
@@ -111,6 +115,37 @@ func getUserByID(context *gin.Context) {
 	context.SecureJSON(http.StatusOK, gin.H{
 		"message": "user details",
 		"data":    user,
+		"success": true,
+	})
+}
+
+
+func signOut(context *gin.Context) {
+	userID, err := strconv.ParseInt(context.Param("id"), 10, 64)
+	contextID := context.GetInt64("userID")
+
+	if err != nil {
+		context.SecureJSON(http.StatusBadRequest, gin.H{
+			"message": "Could not parse user ID",
+			"success": false,
+		})
+		return
+	}
+
+	// Verify if the account owner have initiated the logout process
+	if contextID != userID {
+		context.SecureJSON(http.StatusUnauthorized, gin.H{
+			"message": "Something went wrong",
+			"success": false,
+		})
+		return
+	}
+
+	// remove cookie by setting a empty string as a value
+	context.SetCookie("tkauth", "", 0, "/", domain, mode, true)
+
+	context.SecureJSON(http.StatusOK, gin.H{
+		"message": "Logout successfully ",
 		"success": true,
 	})
 }

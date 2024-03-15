@@ -1,9 +1,9 @@
 package helpers
 
 import (
+	"oblackserver/db"
 	"os"
 	"github.com/joho/godotenv"
-	"oblackserver/db"
 )
 
 // EnvCloudName return the cloud name
@@ -64,4 +64,17 @@ func EnvDomainNameKey() string {
 	}
 	secret := os.Getenv("DomainName")
 	return secret
+}
+
+// EnvMode return the status mode of server (dev/production)
+func EnvMode() bool {
+	defer db.RecoverEnv()
+	if err := godotenv.Load(".env"); err != nil {
+		panic(err)
+	}
+	mode := os.Getenv("mode")
+	if mode == "production" {
+		return true
+	}
+	return false
 }
