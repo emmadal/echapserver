@@ -2,10 +2,10 @@ package models
 
 import "oblackserver/db"
 
-// GetOTPCodeByUserID get a otp code
-func GetOTPCodeByUserID(userID int64) (*OTP, error) {
-	query := `SELECT id, code, is_used, expiration, user_id FROM otp WHERE user_id = ?`
-	rows := db.DB.QueryRow(query, userID)
+// GetOTPCode get a otp code
+func GetOTPCode(code string) (*OTP, error) {
+	query := `SELECT id, code, is_used, expiration, user_id FROM otp WHERE code = ?`
+	rows := db.DB.QueryRow(query, code)
 
 	var otp OTP
 

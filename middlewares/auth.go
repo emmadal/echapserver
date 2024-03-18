@@ -8,9 +8,9 @@ import (
 
 // Authenticate is a middleware for authorization
 func Authenticate(context *gin.Context) {
-	token, err := context.Cookie("tkauth")
+	token := context.Request.Header.Get("Authorization")
 
-	if err != nil || token == "" {
+	if token == "" {
 		context.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
 			"message": "Unauthorized",
 		})
