@@ -49,7 +49,7 @@ func verifyOTP(context *gin.Context) {
 		return
 	}
 
-	user, err := models.FindUserByID(userID)
+	user, err := models.FindUserByID(otp.UserID)
 	if err != nil {
 		context.SecureJSON(http.StatusInternalServerError, gin.H{
 			"success": false,
@@ -57,7 +57,6 @@ func verifyOTP(context *gin.Context) {
 		})
 		return
 	}
-
 	context.SecureJSON(http.StatusOK, gin.H{
 		"success": true,
 		"data": user,
