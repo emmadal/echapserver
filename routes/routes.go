@@ -11,18 +11,27 @@ func RegisterRoutes(server *gin.Engine) {
 	// create a route group for protected endpoints and attach middleware to it
 	authenticated := server.Group("/")
 	authenticated.Use(middlewares.Authenticate)
+	authenticated.POST("/upload", uploadImage)
+	
+	// OTP related API's
+	authenticated.POST("/otp-verification", verifyOTP)
+	authenticated.GET("/otp", getOTP)
+
+	// user related API's
+	authenticated.GET("/user/:id", getUserByID)
+	authenticated.PUT("/user/:id", updateUser)
+
+	// Category related API's
 	authenticated.POST("/category", createCategory)
 	authenticated.PUT("/category/:id", updateCategory)
 	authenticated.DELETE("/category/:id", deleteCategory)
-	authenticated.POST("/upload", uploadImage)
-	authenticated.POST("/otp-verification", verifyOTP)
-	authenticated.GET("/user/:id", getUserByID)
-	authenticated.GET("/otp", getOTP)
-	authenticated.POST("/article", createArticle)
-	authenticated.GET("/logout/:id", signOut)
-	authenticated.GET("/articles/:category_id", getArticles)
-	authenticated.PUT("/user/:id", updateUser)
 
+	// Article
+	authenticated.POST("/article", createArticle)
+	authenticated.DELETE("/article/:id", deleteArticle)
+	authenticated.GET("/articles/:category_id", getArticles)
+
+	// No need authentication
 	server.GET("/categories", getCategories)
 	server.GET("/category/:id", getCategoryByID)
 	server.POST("/register", register)

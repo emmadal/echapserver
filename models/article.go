@@ -63,3 +63,36 @@ func GetAllArticle(articleID string) ([]Article, error) {
 	}
 	return articles, nil
 }
+
+// FindArticleByID get a article by articleID
+func FindArticleByID(articleID int64) (*Article, error) {
+	query := `SELECT * FROM ARTICLE WHERE ID = ?`
+	row := db.DB.QueryRow(query, articleID)
+
+	var item Article
+	var photos []byte
+
+	err := row.Scan(&item.ID, &item.Title, &item.Description, &item.Price, &item.Phone, &item.Banner, &photos, &item.AuthorID, &item.CategoryID, &item.CountryID, &item.CityID, &item.CreatedAt)
+	if err != nil {
+		return nil, err
+	}
+
+	err = json.Unmarshal(photos, &item.Photos)
+	if err != nil {
+		return nil, err
+	}
+	return &item, nil
+}
+
+// DeleteArticle delete an article
+func DeleteArticle(articleID int64) error {
+	query := `DELETE FROM article WHERE ID = ?`
+	stmt, err := db.DB.Prepare(query)
+	defer stmt.Close()
+	if err != nil {
+		return err
+	}
+
+	_, err = stmt.Exec(articleID)
+	return err
+}

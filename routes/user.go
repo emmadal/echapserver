@@ -109,36 +109,6 @@ func getUserByID(context *gin.Context) {
 	})
 }
 
-func signOut(context *gin.Context) {
-	userID, err := strconv.ParseInt(context.Param("id"), 10, 64)
-	contextID := context.GetInt64("userID")
-
-	if err != nil {
-		context.SecureJSON(http.StatusBadRequest, gin.H{
-			"message": "Could not parse user ID",
-			"success": false,
-		})
-		return
-	}
-
-	// Verify if the account owner have initiated the logout process
-	if contextID != userID {
-		context.SecureJSON(http.StatusUnauthorized, gin.H{
-			"message": "Something went wrong",
-			"success": false,
-		})
-		return
-	}
-
-	// remove cookie by setting a empty string as a value
-	context.SetCookie("tkauth", "", 0, "/", domain, mode, true)
-
-	context.SecureJSON(http.StatusOK, gin.H{
-		"message": "Logout successfully ",
-		"success": true,
-	})
-}
-
 func updateUser(context *gin.Context) {
 	id, err := strconv.ParseInt(context.Param("id"), 10, 64)
 	userID := context.GetInt64("userID")
