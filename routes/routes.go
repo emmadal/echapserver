@@ -1,8 +1,8 @@
 package routes
 
 import (
-	"github.com/gin-gonic/gin"
 	"oblackserver/middlewares"
+	"github.com/gin-gonic/gin"
 )
 
 // RegisterRoutes register all of the routes that are needed by the application.
@@ -21,6 +21,7 @@ func RegisterRoutes(server *gin.Engine) {
 	authenticated.POST("/article", createArticle)
 	authenticated.GET("/logout/:id", signOut)
 	authenticated.GET("/articles/:category_id", getArticles)
+	authenticated.PUT("/user/:id", updateUser)
 
 	server.GET("/categories", getCategories)
 	server.GET("/category/:id", getCategoryByID)

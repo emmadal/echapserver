@@ -60,7 +60,7 @@ func FindUserByID(id int64) (*User, error) {
 	var user User
 	err := row.Scan(&user.ID, &user.Name, &biography, &user.Premium, &user.Phone, &user.CountryID, &user.CityID, &photo, &whatsapp, &tiktok, &instagram, &user.CreatedAt)
 
-	if biography.Valid && whatsapp.Valid && tiktok.Valid && instagram.Valid {
+	if !biography.Valid || !whatsapp.Valid || !tiktok.Valid || !instagram.Valid {
 		user.Biography = ""
 		user.Photo = ""
 		user.Whatsapp = ""
@@ -73,4 +73,18 @@ func FindUserByID(id int64) (*User, error) {
 	}
 
 	return &user, nil
+}
+
+// UpdateUser update a user
+func UpdateUser(user User) error {
+	query := `UPDATE user SET name = ?, biography = ?, premium = ?, phone = ?, country_id = ?, city_id = ?, photo = ?, whatsapp = ?, tiktok = ?, instagram = ? WHERE id = ?`
+	stmt, err := db.DB.Prepare(query)
+	defer stmt.Close()
+	if err != nil {
+		return err
+	}
+
+	_, err = stmt.Exec(user.Name, user.Biography, user.Premium, user.Phone, user.CountryID, user.CityID, user.Photo, user.Whatsapp, user.TikTok, user.Instagram, user.ID)
+
+	return err
 }

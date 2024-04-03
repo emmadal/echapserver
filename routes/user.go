@@ -66,19 +66,9 @@ func login(context *gin.Context) {
 		return
 	}
 
-	// get the cookie options for setting up the httpOnly and secure flags
-	_, err = context.Cookie("tkauth")
-	if err != nil {
-		maxAge := 2 * 60 * 60
-		domain := helpers.EnvDomainNameKey()
-		context.SetCookie("tkauth", token, maxAge, "/", domain, mode, true)
-	}
-
-	user, _ = models.FindUserByID(user.ID)
-
 	context.SecureJSON(http.StatusOK, gin.H{
 		"message": "Login  Successful",
-		"data":    user,
+		"data":    token,
 		"success": true,
 	})
 }
@@ -96,7 +86,7 @@ func getUserByID(context *gin.Context) {
 	}
 
 	// Verify if the requesting user is trying to access another users data
-	if userID != contextUserID  {
+	if userID != contextUserID {
 		context.SecureJSON(http.StatusNotFound, gin.H{
 			"message": "User Not Found",
 			"success": false,
@@ -118,7 +108,6 @@ func getUserByID(context *gin.Context) {
 		"success": true,
 	})
 }
-
 
 func signOut(context *gin.Context) {
 	userID, err := strconv.ParseInt(context.Param("id"), 10, 64)
@@ -147,5 +136,63 @@ func signOut(context *gin.Context) {
 	context.SecureJSON(http.StatusOK, gin.H{
 		"message": "Logout successfully ",
 		"success": true,
+	})
+}
+
+func updateUser(context *gin.Context) {
+	id, err := strconv.ParseInt(context.Param("id"), 10, 64)
+	userID := context.GetInt64("userID")
+
+	if err != nil {
+		context.SecureJSON(http.StatusBadRequest, gin.H{
+			"message": "Could not parse user ID",
+			"success": false,
+		})
+		return
+	}
+
+	// verify if the user exist in the database
+	user, err := models.FindUserByID(id)
+	if err != nil {
+		context.SecureJSON(http.StatusNotFound, gin.H{
+			"message": "No data found",
+			"success": false,
+		})
+		return
+	}
+
+	// We verify if it's the user owner before to update
+	if userID != user.ID {
+		context.SecureJSON(http.StatusUnauthorized, gin.H{
+			"message": "Not authorized to update",
+			"success": false,
+		})
+		return
+	}
+
+	// send the new  data to be updated on the database
+	var newData models.User
+	err = context.ShouldBindJSON(&newData)
+	if err != nil {
+		context.SecureJSON(http.StatusBadRequest, gin.H{
+			"message": "Bad request",
+			"success": false,
+		})
+		return
+	}
+
+	// Update the user with the new Data
+	newData.ID = user.ID
+	err = models.UpdateUser(newData)
+	if err != nil {
+		context.SecureJSON(http.StatusInternalServerError, gin.H{
+			"message": "Unable to update user profile",
+			"success": false,
+		})
+		return
+	}
+	context.SecureJSON(http.StatusOK, gin.H{
+		"success": true,
+		"message": "User profile updated",
 	})
 }
