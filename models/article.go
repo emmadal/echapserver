@@ -1,6 +1,7 @@
 package models
 
 import (
+	"database/sql"
 	"encoding/json"
 	"oblackserver/db"
 )
@@ -25,9 +26,40 @@ func CreateArticle(article Article) error {
 	if err != nil {
 		return err
 	}
-	
+
 	id, err := result.LastInsertId()
 	article.ID = id
 
 	return err
+}
+
+// GetAllArticle fetch article by categoryId
+func GetAllArticle(articleID string) ([]Article, error) {
+	query := `SELECT * FROM ARTICLE WHERE category_id = ? ORDER BY created_at DESC`
+
+	rows, err := db.DB.Query(query, articleID)
+	defer rows.Close()
+
+	if err != nil {
+		return nil, err
+	}
+
+	var articles []Article
+	var photos sql.RawBytes
+
+	for rows.Next() {
+		var item Article
+		err := rows.Scan(&item.ID, &item.Title, &item.Description, &item.Price, &item.Phone, &item.Banner, &photos, &item.AuthorID, &item.CategoryID, &item.CountryID, &item.CityID, &item.CreatedAt)
+		if err != nil {
+			return nil, err
+		}
+
+		err = json.Unmarshal(photos, &item.Photos)
+		if err != nil {
+			return nil, err
+		}
+
+		articles = append(articles, item)
+	}
+	return articles, nil
 }
