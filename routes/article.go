@@ -1,7 +1,6 @@
 package routes
 
 import (
-	"fmt"
 	"net/http"
 	"oblackserver/models"
 	"strconv"
@@ -55,7 +54,7 @@ func getArticles(context *gin.Context) {
 
 	if err != nil {
 		context.SecureJSON(http.StatusNotFound, gin.H{
-			"message": err.Error(),
+			"message": "Data not found",
 			"success": false,
 		})
 		return
@@ -81,8 +80,6 @@ func deleteArticle(context *gin.Context) {
 		})
 		return
 	}
-
-	fmt.Println("ArticleID:", articleID)
 
 	// verify is the article exist in the database
 	article, err := models.FindArticleByID(articleID)
@@ -113,5 +110,50 @@ func deleteArticle(context *gin.Context) {
 	context.SecureJSON(http.StatusOK, gin.H{
 		"success": true,
 		"message": "Article deleted",
+	})
+}
+
+func getArticleByUser(context *gin.Context) {
+	userID, err := strconv.ParseInt(context.Param("userID"), 10, 64)
+	offset, err := strconv.ParseInt(context.Param("offset"), 10, 64)
+	contextID := context.GetInt64("userID")
+
+	if err != nil {
+		context.SecureJSON(http.StatusBadRequest, gin.H{
+			"message": "Failed to parse user id and offset value",
+			"success": false,
+		})
+		return
+	}
+
+	user, err := models.FindUserByID(userID)
+	if err != nil {
+		context.SecureJSON(http.StatusNotFound, gin.H{
+			"message": "No data found",
+			"success": false,
+		})
+		return
+	}
+
+	if user.ID != contextID {
+		context.SecureJSON(http.StatusUnauthorized, gin.H{
+			"message": "Not authorized to continue",
+			"success": false,
+		})
+		return
+	}
+
+	articles, err := models.GetArticlesByUser(userID, offset)
+	if err != nil {
+		context.SecureJSON(http.StatusNotFound, gin.H{
+			"message": "No articles found",
+			"success": false,
+		})
+		return
+	}
+
+	context.SecureJSON(http.StatusOK, gin.H{
+		"success": true,
+		"data":    articles,
 	})
 }

@@ -3,6 +3,7 @@ package models
 import (
 	"database/sql"
 	"encoding/json"
+	"fmt"
 	"oblackserver/db"
 )
 
@@ -95,4 +96,37 @@ func DeleteArticle(articleID int64) error {
 
 	_, err = stmt.Exec(articleID)
 	return err
+}
+
+// GetArticlesByUser fetch all articles by userID
+func GetArticlesByUser(userID, offset int64) ([]Article, error) {
+	fmt.Println(userID)
+	fmt.Println(offset)
+	query := `SELECT * FROM ARTICLE WHERE author_id = ? ORDER BY created_at DESC LIMIT 10 OFFSET ?`
+
+	rows, err := db.DB.Query(query, userID, offset)
+	defer rows.Close()
+
+	if err != nil {
+		return nil, err
+	}
+
+	var articles []Article
+	var photos sql.RawBytes
+
+	for rows.Next() {
+		var item Article
+		err := rows.Scan(&item.ID, &item.Title, &item.Description, &item.Price, &item.Phone, &item.Banner, &photos, &item.AuthorID, &item.CategoryID, &item.CountryID, &item.CityID, &item.CreatedAt)
+		if err != nil {
+			return nil, err
+		}
+
+		err = json.Unmarshal(photos, &item.Photos)
+		if err != nil {
+			return nil, err
+		}
+
+		articles = append(articles, item)
+	}
+	return articles, nil
 }
