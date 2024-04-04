@@ -77,7 +77,7 @@ func FindUserByID(id int64) (*User, error) {
 
 // UpdateUser update a user
 func UpdateUser(user User) error {
-	query := `UPDATE user SET name = ?, biography = ?, premium = ?, phone = ?, country_id = ?, city_id = ?, photo = ?, whatsapp = ?, tiktok = ?, instagram = ? WHERE id = ?`
+	query := `UPDATE users SET name = ?, biography = ?, premium = ?, phone = ?, country_id = ?, city_id = ?, photo = ?, whatsapp = ?, tiktok = ?, instagram = ? WHERE id = ?`
 	stmt, err := db.DB.Prepare(query)
 	defer stmt.Close()
 	if err != nil {

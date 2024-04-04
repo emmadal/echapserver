@@ -153,6 +153,7 @@ func updateUser(context *gin.Context) {
 
 	// Update the user with the new Data
 	newData.ID = user.ID
+	newData.CreatedAt = user.CreatedAt
 	err = models.UpdateUser(newData)
 	if err != nil {
 		context.SecureJSON(http.StatusInternalServerError, gin.H{
@@ -163,6 +164,7 @@ func updateUser(context *gin.Context) {
 	}
 	context.SecureJSON(http.StatusOK, gin.H{
 		"success": true,
+		"data":    newData,
 		"message": "User profile updated",
 	})
 }
