@@ -36,6 +36,7 @@ func RegisterRoutes(server *gin.Engine) {
 	server.GET("/categories", getCategories)
 	server.GET("/category/:id", getCategoryByID)
 	server.GET("/city/:countryID", getCitiesByCountry)
+	server.GET("/countries", getCounties)
 	server.POST("/register", register)
 	server.POST("/login", login)
 }
