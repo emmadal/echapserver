@@ -2,6 +2,7 @@ package routes
 
 import (
 	"oblackserver/middlewares"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -12,7 +13,7 @@ func RegisterRoutes(server *gin.Engine) {
 	authenticated := server.Group("/")
 	authenticated.Use(middlewares.Authenticate)
 	authenticated.POST("/upload", uploadImage)
-	
+
 	// OTP related API's
 	authenticated.POST("/otp-verification", verifyOTP)
 	authenticated.GET("/otp", getOTP)
@@ -34,6 +35,7 @@ func RegisterRoutes(server *gin.Engine) {
 	// No need authentication
 	server.GET("/categories", getCategories)
 	server.GET("/category/:id", getCategoryByID)
+	server.GET("/city/:countryID", getCitiesByCountry)
 	server.POST("/register", register)
 	server.POST("/login", login)
 }
