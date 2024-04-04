@@ -3,7 +3,6 @@ package models
 import (
 	"database/sql"
 	"encoding/json"
-	"fmt"
 	"oblackserver/db"
 )
 
@@ -100,8 +99,6 @@ func DeleteArticle(articleID int64) error {
 
 // GetArticlesByUser fetch all articles by userID
 func GetArticlesByUser(userID, offset int64) ([]Article, error) {
-	fmt.Println(userID)
-	fmt.Println(offset)
 	query := `SELECT * FROM ARTICLE WHERE author_id = ? ORDER BY created_at DESC LIMIT 10 OFFSET ?`
 
 	rows, err := db.DB.Query(query, userID, offset)
