@@ -1,6 +1,7 @@
 package routes
 
 import (
+	"math"
 	"net/http"
 	"oblackserver/models"
 	"strconv"
@@ -114,13 +115,13 @@ func deleteArticle(context *gin.Context) {
 }
 
 func getArticleByUser(context *gin.Context) {
-	userID, err := strconv.ParseInt(context.Param("userID"), 10, 64)
-	offset, err := strconv.ParseInt(context.Param("offset"), 10, 64)
+	userID, err := strconv.ParseInt(context.Query("user"), 10, 64)
+	page, err := strconv.ParseInt(context.Query("page"), 10, 64)
 	contextID := context.GetInt64("userID")
 
 	if err != nil {
 		context.SecureJSON(http.StatusBadRequest, gin.H{
-			"message": "Failed to parse user id and offset value",
+			"message": err.Error(),
 			"success": false,
 		})
 		return
@@ -143,7 +144,14 @@ func getArticleByUser(context *gin.Context) {
 		return
 	}
 
-	articles, err := models.GetArticlesByUser(userID, offset)
+	if page == 0 {
+		page = 1
+	}
+
+	articles, err := models.GetArticlesByUser(userID, page)
+	total := len(articles)
+	lastPage := math.Ceil(float64(total) / float64(page))
+
 	if err != nil {
 		context.SecureJSON(http.StatusNotFound, gin.H{
 			"message": "No articles found",
@@ -153,7 +161,9 @@ func getArticleByUser(context *gin.Context) {
 	}
 
 	context.SecureJSON(http.StatusOK, gin.H{
-		"success": true,
-		"data":    articles,
+		"success":    true,
+		"data":       articles,
+		"total":      total,
+		"nextCursor": lastPage,
 	})
 }

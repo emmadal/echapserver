@@ -31,7 +31,7 @@ func RegisterRoutes(server *gin.Engine) {
 	authenticated.POST("/article", createArticle)
 	authenticated.DELETE("/article/:id", deleteArticle)
 	authenticated.GET("/articles/:category_id", getArticles)
-	authenticated.GET("/articles/user/:userID/:offset", getArticleByUser)
+	authenticated.GET("/articles/owner", getArticleByUser)
 
 	// No need authentication
 	server.GET("/categories", getCategories)

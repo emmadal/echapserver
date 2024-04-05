@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"encoding/json"
 	"oblackserver/db"
+	"strconv"
 )
 
 // CreateArticle create article
@@ -98,10 +99,10 @@ func DeleteArticle(articleID int64) error {
 }
 
 // GetArticlesByUser fetch all articles by userID
-func GetArticlesByUser(userID, offset int64) ([]Article, error) {
-	query := `SELECT * FROM ARTICLE WHERE author_id = ? ORDER BY created_at DESC LIMIT 10 OFFSET ?`
-
-	rows, err := db.DB.Query(query, userID, offset)
+func GetArticlesByUser(userID, page int64) ([]Article, error) {
+	perPage, _ := strconv.ParseInt("10", 10, 64)
+	query := `SELECT * FROM ARTICLE WHERE author_id = ? ORDER BY created_at DESC LIMIT ? OFFSET ?`
+	rows, err := db.DB.Query(query, userID, perPage, (page-1)*perPage)
 	defer rows.Close()
 
 	if err != nil {
