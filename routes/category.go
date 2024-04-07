@@ -1,8 +1,8 @@
 package routes
 
 import (
+	"echapserver/models"
 	"net/http"
-	"oblackserver/models"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
@@ -18,12 +18,12 @@ func getCategories(context *gin.Context) {
 		return
 	}
 	context.SecureJSON(http.StatusOK, gin.H{
-		"data":  categories,
+		"data":    categories,
 		"success": true,
 	})
 }
 
-func createCategory(context *gin.Context) {	
+func createCategory(context *gin.Context) {
 	userID := context.GetInt64("userID")
 
 	var category models.Category
@@ -35,11 +35,10 @@ func createCategory(context *gin.Context) {
 		return
 	}
 
-	
 	err = models.CreateCategory(category)
 	if err != nil {
 		context.SecureJSON(http.StatusInternalServerError, gin.H{
-			"message": "Unable to create data", 
+			"message": "Unable to create data",
 			"success": false,
 		})
 		return
@@ -65,14 +64,14 @@ func getCategoryByID(context *gin.Context) {
 	category, err := models.GetCategoryByID(categoryID)
 	if err != nil {
 		context.JSON(http.StatusNotFound, gin.H{
-			"message": "Unable to fetch category data", 
+			"message": "Unable to fetch category data",
 			"success": false,
 		})
 		return
 	}
 	context.JSON(http.StatusOK, gin.H{
 		"success": true,
-		"data": category,
+		"data":    category,
 	})
 }
 
@@ -93,10 +92,10 @@ func updateCategory(context *gin.Context) {
 	}
 
 	// verify if the category exist in the database
-	category, err :=  models.GetCategoryByID(categoryID)
+	category, err := models.GetCategoryByID(categoryID)
 	if err != nil {
 		context.SecureJSON(http.StatusNotFound, gin.H{
-			"message": "Unable to find this data", 
+			"message": "Unable to find this data",
 			"success": false,
 		})
 		return
@@ -122,7 +121,7 @@ func updateCategory(context *gin.Context) {
 	err = models.UpdateCategory(newData)
 	if err != nil {
 		context.SecureJSON(http.StatusInternalServerError, gin.H{
-			"message": "Unable to update category data", 
+			"message": "Unable to update category data",
 			"success": false,
 		})
 		return
@@ -139,7 +138,7 @@ func deleteCategory(context *gin.Context) {
 
 	// get the userID in the context
 	userID := context.GetInt64("userID")
-	
+
 	categoryID, err := strconv.ParseInt(id, 10, 64)
 	if err != nil {
 		context.SecureJSON(http.StatusBadRequest, gin.H{
@@ -150,10 +149,10 @@ func deleteCategory(context *gin.Context) {
 	}
 
 	// verify is the category exist in the database
-	category, err :=  models.GetCategoryByID(categoryID)
+	category, err := models.GetCategoryByID(categoryID)
 	if err != nil {
 		context.SecureJSON(http.StatusNotFound, gin.H{
-			"message": "Unable to find this data", 
+			"message": "Unable to find this data",
 			"success": false,
 		})
 		return
@@ -169,7 +168,7 @@ func deleteCategory(context *gin.Context) {
 	err = models.DeleteCategory(categoryID)
 	if err != nil {
 		context.SecureJSON(http.StatusInternalServerError, gin.H{
-			"message": "Unable to delete category", 
+			"message": "Unable to delete category",
 			"success": false,
 		})
 		return

@@ -15,10 +15,3 @@ func recoverTable() {
 	}
 }
 
-// RecoverEnv defer error when .env file is not found
-func RecoverEnv() {
-	err := recover()
-	if err != nil {
-		log.Fatalln("Unable to load .env file:", err)
-	}
-}

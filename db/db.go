@@ -3,6 +3,7 @@ package db
 import (
 	"database/sql"
 	"fmt"
+	"log"
 	"os"
 	"time"
 
@@ -17,12 +18,24 @@ var DB *sql.DB
 func InitDB() {
 	defer recoverDB()
 
-	credentials := parseDBEnv()
+	err := godotenv.Load(".env")
+
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	username := os.Getenv("USERNAME")
+	password := os.Getenv("PASSWORD")
+	dbName := os.Getenv("DBNAME")
+	host := os.Getenv("HOST")
+
+	credentials := fmt.Sprintf("%v:%v@tcp(%v:3306)/%v?parseTime=true", username, password, host, dbName)
+
 	db, err := sql.Open("mysql", credentials)
 	DB = db
 
 	if err != nil {
-		panic(err)
+		log.Fatalln(err)
 	}
 
 	// See "Important settings" section.
@@ -30,21 +43,7 @@ func InitDB() {
 	db.SetMaxOpenConns(10)
 	db.SetMaxIdleConns(10)
 
-	go createTales()
-}
-
-func parseDBEnv() (credentials string) {
-	defer RecoverEnv()
-
-	if err := godotenv.Load(".env"); err != nil {
-		panic(err)
-	}
-	username := os.Getenv("USERNAME")
-	password := os.Getenv("PASSWORD")
-	dbName := os.Getenv("DBNAME")
-	host := os.Getenv("HOST")
-	credentials = fmt.Sprintf("%v:%v@tcp(%v:3306)/%v?parseTime=true", username, password, host, dbName)
-	return
+	createTales()
 }
 
 func createTales() {

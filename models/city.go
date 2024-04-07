@@ -1,6 +1,6 @@
 package models
 
-import "oblackserver/db"
+import "echapserver/db"
 
 // FindCitiesByCountryID get all cities by country
 func FindCitiesByCountryID(countryID int64) ([]City, error) {

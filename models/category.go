@@ -1,6 +1,6 @@
 package models
 
-import "oblackserver/db"
+import "echapserver/db"
 
 // GetAllCategories return the list of categories
 func GetAllCategories() ([]Category, error) {
@@ -33,7 +33,7 @@ func CreateCategory(category Category) error {
 	if err != nil {
 		return err
 	}
-	
+
 	id, err := result.LastInsertId()
 	category.ID = id
 

@@ -1,7 +1,7 @@
 package routes
 
 import (
-	"oblackserver/middlewares"
+	"echapserver/middlewares"
 
 	"github.com/gin-gonic/gin"
 )

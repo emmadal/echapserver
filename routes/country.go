@@ -1,8 +1,8 @@
 package routes
 
 import (
+	"echapserver/models"
 	"net/http"
-	"oblackserver/models"
 
 	"github.com/gin-gonic/gin"
 )

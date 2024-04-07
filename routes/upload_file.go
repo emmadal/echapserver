@@ -1,15 +1,15 @@
 package routes
 
 import (
+	"echapserver/helpers"
 	"net/http"
-	"oblackserver/helpers"
 
 	"github.com/gin-gonic/gin"
 )
 
 func uploadImage(context *gin.Context) {
 	// return the first file for the provided form key.
-	header, err := context.FormFile("file") 
+	header, err := context.FormFile("file")
 
 	if err != nil {
 		context.SecureJSON(http.StatusBadRequest, gin.H{"message": "Bad image format", "success": false})

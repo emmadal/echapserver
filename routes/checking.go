@@ -1,9 +1,9 @@
 package routes
 
 import (
+	"echapserver/helpers"
+	"echapserver/models"
 	"net/http"
-	"oblackserver/helpers"
-	"oblackserver/models"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -59,7 +59,7 @@ func verifyOTP(context *gin.Context) {
 	}
 	context.SecureJSON(http.StatusOK, gin.H{
 		"success": true,
-		"data": user,
+		"data":    user,
 		"message": "Code verified successfully.",
 	})
 }

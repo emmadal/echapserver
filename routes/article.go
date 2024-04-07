@@ -1,9 +1,9 @@
 package routes
 
 import (
+	"echapserver/models"
 	"math"
 	"net/http"
-	"oblackserver/models"
 	"strconv"
 
 	"github.com/gin-gonic/gin"

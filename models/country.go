@@ -1,6 +1,6 @@
 package models
 
-import "oblackserver/db"
+import "echapserver/db"
 
 // FindCountries get all countries
 func FindCountries() ([]Country, error) {

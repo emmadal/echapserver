@@ -2,7 +2,7 @@ package models
 
 import (
 	"database/sql"
-	"oblackserver/db"
+	"echapserver/db"
 )
 
 // CreateUser create user

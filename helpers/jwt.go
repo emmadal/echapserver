@@ -2,12 +2,13 @@ package helpers
 
 import (
 	"errors"
+	"os"
 	"time"
 	"github.com/golang-jwt/jwt/v5"
 )
 
 // secret key
-var key = EnvSecretKey()
+var key = os.Getenv("Secret_Key")
 
 // CreateToken creates a new JWT token with the given claims and signs it using HS256 algorithm.
 func CreateToken(userID int64, phone string) (string, error) {

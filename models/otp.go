@@ -1,6 +1,6 @@
 package models
 
-import "oblackserver/db"
+import "echapserver/db"
 
 // GetOTPCode get a otp code
 func GetOTPCode(code string) (*OTP, error) {

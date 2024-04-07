@@ -3,15 +3,16 @@ package helpers
 import (
 	"context"
 	"mime/multipart"
+	"os"
 	"github.com/cloudinary/cloudinary-go/v2"
 	"github.com/cloudinary/cloudinary-go/v2/api/uploader"
 )
 
 // UploadHelper upload file to cloudinary cloud
 func UploadHelper(file *multipart.FileHeader) (string, error) {
-	cloudName := EnvCloudName()
-	key := EnvCloudAPIKey()
-	secret := EnvCloudSecretAPI()
+	cloudName := os.Getenv("CloudName")
+	key := os.Getenv("CloudAPIKey")
+	secret := os.Getenv("CloudSecret")
 	cld, err := cloudinary.NewFromParams(cloudName, key, secret)
 	cld.Config.URL.Secure = true
 	if err != nil {

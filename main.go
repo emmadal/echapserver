@@ -1,20 +1,30 @@
 package main
 
 import (
-	"github.com/gin-gonic/gin"
+	"echapserver/db"
+	"echapserver/routes"
 	"log"
-	"oblackserver/db"
-	"oblackserver/routes"
+	"os"
+
+	"github.com/gin-gonic/gin"
 )
 
-func main() {
-	db.InitDB() // Database initialization
+var mode = os.Getenv("GIN_MODE")
 
+func main() {
+	db.InitDB()             // Database initialization
 	server := gin.Default() // Server initialization
+	gin.SetMode(mode)       // set the running mode (debug/production)
+
+	port := os.Getenv("PORT")
+
+	if port == "" {
+		port = ":4000"
+	}
 
 	routes.RegisterRoutes(server) // Routes registration
 
-	err := server.Run(":8080") // Start the server on port 8080
+	err := server.Run(port) // Start the server
 	if err != nil {
 		log.Fatalln(err)
 	}

@@ -1,16 +1,16 @@
 package routes
 
 import (
+	"echapserver/helpers"
+	"echapserver/models"
 	"net/http"
-	"oblackserver/helpers"
-	"oblackserver/models"
+	"os"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
 
-var domain = helpers.EnvDomainNameKey()
-var mode = helpers.EnvMode()
+var domain = os.Getenv("DomainName")
 
 func register(context *gin.Context) {
 	var user models.User
