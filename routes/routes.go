@@ -40,4 +40,5 @@ func RegisterRoutes(server *gin.Engine) {
 	server.GET("/countries", getCounties)
 	server.POST("/register", register)
 	server.POST("/login", login)
+	server.GET("/welcome", welcome)
 }
