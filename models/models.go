@@ -98,3 +98,9 @@ type OTP struct {
 type OTPAuth struct {
 	Code string `json:"code"`
 }
+
+// Subscription struct
+type Subscription struct {
+	Premium bool  `json:"premium"`
+	UserID  int64 `json:"user_id" binding:"required"`
+}
