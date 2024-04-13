@@ -3,25 +3,18 @@ package helpers
 import (
 	"math/rand"
 	"strconv"
+	"strings"
 )
 
 const maxNum = 5
 
-func sliceNumToString(num []int) string {
-	var result string
-	for _, v := range num {
-		result += strconv.Itoa(v)
-	}
-	return result
-}
-
 // GenerateOTPCode generate otp code for authentication
-func GenerateOTPCode () string {
-	sliceNumber := make([]int, 0)
-	for  i:=1; i <= maxNum ;i++ {
+func GenerateOTPCode() string {
+	var randomString []string
+	for i := 1; i <= maxNum; i++ {
 		random := rand.Intn(10)
-		sliceNumber = append(sliceNumber, random)
+		randomString = append(randomString, strconv.Itoa(random))
 	}
-	result := sliceNumToString(sliceNumber)
-	return  result
+	result := strings.Join(randomString, "")
+	return result
 }
