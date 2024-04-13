@@ -72,7 +72,7 @@ func createTales() {
 			name VARCHAR(100) NOT NULL,
 			biography VARCHAR(255),
 			premium TINYINT DEFAULT 0 NOT NULL,
-			phone VARCHAR(15) NOT NULL,
+			phone VARCHAR(13) NOT NULL,
 			country_id INTEGER NOT NULL,
 			city_id INTEGER NOT NULL,
 			photo TEXT,

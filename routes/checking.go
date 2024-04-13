@@ -11,10 +11,9 @@ import (
 
 func verifyOTP(context *gin.Context) {
 	userID := context.GetInt64("userID")
-
 	var jsonOTP models.OTPAuth
-	err := context.ShouldBindJSON(&jsonOTP)
-	if err != nil {
+
+	if err := context.ShouldBindJSON(&jsonOTP); err != nil {
 		context.SecureJSON(http.StatusBadRequest, gin.H{
 			"success": false,
 			"message": "Invalid request",
@@ -31,17 +30,16 @@ func verifyOTP(context *gin.Context) {
 		return
 	}
 
-	if otp.UserID != userID || otp.IsUsed || otp.Expiration.After(otp.Expiration) {
+	if otp.UserID != userID || otp.IsUsed || time.Now().After(otp.Expiration) {
 		context.SecureJSON(http.StatusForbidden, gin.H{
 			"success": false,
-			"message": "Code not authorized",
+			"message": "Code expired. Please generate a new one.",
 		})
 		return
 	}
 
 	otp.IsUsed = true
-	err = models.UpdateOTPCode(*otp)
-	if err != nil {
+	if err = models.UpdateOTPCode(*otp); err != nil {
 		context.SecureJSON(http.StatusInternalServerError, gin.H{
 			"success": false,
 			"message": "Something went wrong. Try later",
@@ -49,14 +47,7 @@ func verifyOTP(context *gin.Context) {
 		return
 	}
 
-	user, err := models.FindUserByID(otp.UserID)
-	if err != nil {
-		context.SecureJSON(http.StatusInternalServerError, gin.H{
-			"success": false,
-			"message": "No user found",
-		})
-		return
-	}
+	user, _ := models.FindUserByID(otp.UserID)
 	context.SecureJSON(http.StatusOK, gin.H{
 		"success": true,
 		"data":    user,
