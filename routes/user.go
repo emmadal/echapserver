@@ -22,8 +22,7 @@ func register(context *gin.Context) {
 		})
 		return
 	}
-	err = models.CreateUser(user)
-	if err != nil {
+	if err = models.CreateUser(user); err != nil {
 		context.SecureJSON(http.StatusInternalServerError, gin.H{
 			"message": "Unable to create new account",
 			"success": false,

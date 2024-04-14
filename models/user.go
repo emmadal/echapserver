@@ -33,7 +33,7 @@ func LoginUser(u AuthStruct) (*User, error) {
 	var biography, whatsapp, photo, tiktok, instagram sql.NullString
 
 	var user User
-	err := row.Scan(&user.ID, &user.Name, &biography, &user.Premium, &user.Phone, &user.CountryID, &user.CityID, &photo, &whatsapp, &tiktok, &instagram, &user.CreatedAt)
+	err := row.Scan(&user.ID, &user.Name, &biography, &user.Premium, &user.Phone, &user.IsActive, &user.Role, &user.CountryID, &user.CityID, &photo, &whatsapp, &tiktok, &instagram, &user.CreatedAt)
 
 	if biography.Valid && whatsapp.Valid && tiktok.Valid && instagram.Valid {
 		user.Biography = ""
@@ -58,7 +58,7 @@ func FindUserByID(id int64) (*User, error) {
 	var biography, whatsapp, photo, tiktok, instagram sql.NullString
 
 	var user User
-	err := row.Scan(&user.ID, &user.Name, &biography, &user.Premium, &user.Phone, &user.CountryID, &user.CityID, &photo, &whatsapp, &tiktok, &instagram, &user.CreatedAt)
+	err := row.Scan(&user.ID, &user.Name, &biography, &user.Premium, &user.Phone, &user.IsActive, &user.Role, &user.CountryID, &user.CityID, &photo, &whatsapp, &tiktok, &instagram, &user.CreatedAt)
 
 	if !biography.Valid || !whatsapp.Valid || !tiktok.Valid || !instagram.Valid {
 		user.Biography = ""
@@ -85,6 +85,20 @@ func UpdateUser(user User) error {
 	}
 
 	_, err = stmt.Exec(user.Name, user.Biography, user.Premium, user.Phone, user.CountryID, user.CityID, user.Photo, user.Whatsapp, user.TikTok, user.Instagram, user.ID)
+
+	return err
+}
+
+// DeleteAccount delete user account
+func DeleteAccount(userID int64) error {
+	query := `UPDATE users SET is_active = 0 WHERE id = ?`
+	stmt, err := db.DB.Prepare(query)
+	defer stmt.Close()
+	if err != nil {
+		return err
+	}
+
+	_, err = stmt.Exec(userID)
 
 	return err
 }

@@ -24,9 +24,10 @@ type User struct {
 	ID        int64     `json:"id"`
 	Name      string    `json:"name" binding:"required"`
 	Biography string    `json:"biography"`
-	IsActive  bool      `json:"is_active"`
 	Premium   bool      `json:"premium"`
 	Phone     string    `json:"phone" binding:"required"`
+	IsActive  bool      `json:"is_active"`
+	Role      bool      `json:"role"`
 	CountryID int64     `json:"country_id" binding:"required"`
 	CityID    int64     `json:"city_id" binding:"required"`
 	Photo     string    `json:"photo"`
@@ -56,6 +57,7 @@ type Category struct {
 	ID        int64     `json:"id"`
 	Title     string    `json:"title" binding:"required"`
 	UserID    int64     `json:"user_id" binding:"required"`
+	IsActive  bool      `json:"is_active"`
 	CreatedAt time.Time `json:"created_at"`
 }
 
