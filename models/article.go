@@ -36,7 +36,7 @@ func CreateArticle(article Article) error {
 
 // GetAllArticle fetch article by categoryId
 func GetAllArticle(articleID string) ([]Article, error) {
-	query := `SELECT * FROM ARTICLE WHERE category_id = ? ORDER BY created_at DESC`
+	query := `SELECT * FROM ARTICLE WHERE category_id = ? AND is_active = 1 ORDER BY created_at DESC`
 
 	rows, err := db.DB.Query(query, articleID)
 	defer rows.Close()
@@ -50,7 +50,7 @@ func GetAllArticle(articleID string) ([]Article, error) {
 
 	for rows.Next() {
 		var item Article
-		err := rows.Scan(&item.ID, &item.Title, &item.Description, &item.Price, &item.Phone, &item.Banner, &photos, &item.AuthorID, &item.CategoryID, &item.CountryID, &item.CityID, &item.CreatedAt)
+		err := rows.Scan(&item.ID, &item.Title, &item.Description, &item.Price, &item.IsActive, &item.Phone, &item.Banner, &photos, &item.AuthorID, &item.CategoryID, &item.CountryID, &item.CityID, &item.CreatedAt)
 		if err != nil {
 			return nil, err
 		}
@@ -67,13 +67,13 @@ func GetAllArticle(articleID string) ([]Article, error) {
 
 // FindArticleByID get a article by articleID
 func FindArticleByID(articleID int64) (*Article, error) {
-	query := `SELECT * FROM ARTICLE WHERE ID = ?`
+	query := `SELECT * FROM ARTICLE WHERE ID = ? AND is_active = 1`
 	row := db.DB.QueryRow(query, articleID)
 
 	var item Article
 	var photos []byte
 
-	err := row.Scan(&item.ID, &item.Title, &item.Description, &item.Price, &item.Phone, &item.Banner, &photos, &item.AuthorID, &item.CategoryID, &item.CountryID, &item.CityID, &item.CreatedAt)
+	err := row.Scan(&item.ID, &item.Title, &item.Description, &item.Price, &item.IsActive, &item.Phone, &item.Banner, &photos, &item.AuthorID, &item.CategoryID, &item.CountryID, &item.CityID, &item.CreatedAt)
 	if err != nil {
 		return nil, err
 	}
@@ -87,7 +87,7 @@ func FindArticleByID(articleID int64) (*Article, error) {
 
 // DeleteArticle delete an article
 func DeleteArticle(articleID int64) error {
-	query := `DELETE FROM article WHERE ID = ?`
+	query := `UPDATE article SET is_active = 0 WHERE ID = ?`
 	stmt, err := db.DB.Prepare(query)
 	defer stmt.Close()
 	if err != nil {
@@ -101,7 +101,7 @@ func DeleteArticle(articleID int64) error {
 // GetArticlesByUser fetch all articles by userID
 func GetArticlesByUser(userID, page int64) ([]Article, error) {
 	perPage, _ := strconv.ParseInt("10", 10, 64)
-	query := `SELECT * FROM ARTICLE WHERE author_id = ? ORDER BY created_at DESC LIMIT ? OFFSET ?`
+	query := `SELECT * FROM ARTICLE WHERE author_id = ? AND is_active = 1 ORDER BY created_at DESC LIMIT ? OFFSET ?`
 	rows, err := db.DB.Query(query, userID, perPage, (page-1)*perPage)
 	defer rows.Close()
 
@@ -114,7 +114,7 @@ func GetArticlesByUser(userID, page int64) ([]Article, error) {
 
 	for rows.Next() {
 		var item Article
-		err := rows.Scan(&item.ID, &item.Title, &item.Description, &item.Price, &item.Phone, &item.Banner, &photos, &item.AuthorID, &item.CategoryID, &item.CountryID, &item.CityID, &item.CreatedAt)
+		err := rows.Scan(&item.ID, &item.Title, &item.Description, &item.Price, &item.IsActive, &item.Phone, &item.Banner, &photos, &item.AuthorID, &item.CategoryID, &item.CountryID, &item.CityID, &item.CreatedAt)
 		if err != nil {
 			return nil, err
 		}

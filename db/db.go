@@ -70,9 +70,10 @@ func createTales() {
 		`CREATE TABLE IF NOT EXISTS users (
 			id INTEGER NOT NULL PRIMARY KEY AUTO_INCREMENT,
 			name VARCHAR(100) NOT NULL,
-			biography VARCHAR(255),
+			biography VARCHAR(200),
 			premium TINYINT DEFAULT 0 NOT NULL,
-			phone VARCHAR(13) NOT NULL,
+			phone VARCHAR(10) NOT NULL,
+			role TINYINT DEFAULT 0 NOT NULL,
 			is_active TINYINT DEFAULT 1 NOT NULL,
 			country_id INTEGER NOT NULL,
 			city_id INTEGER NOT NULL,
@@ -93,6 +94,7 @@ func createTales() {
 		`CREATE TABLE IF NOT EXISTS category (
 			id INTEGER NOT NULL PRIMARY KEY AUTO_INCREMENT,
 			title VARCHAR(100) NOT NULL,
+			is_active TINYINT DEFAULT 1 NOT NULL,
 			user_id INTEGER NOT NULL,
 			FOREIGN KEY (user_id) REFERENCES users(id) 
 			ON UPDATE CASCADE

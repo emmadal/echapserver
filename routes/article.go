@@ -86,7 +86,7 @@ func deleteArticle(context *gin.Context) {
 	article, err := models.FindArticleByID(articleID)
 	if err != nil {
 		context.SecureJSON(http.StatusNotFound, gin.H{
-			"message": err.Error(),
+			"message": "The product does not exist",
 			"success": false,
 		})
 		return
