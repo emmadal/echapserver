@@ -9,6 +9,7 @@ type Article struct {
 	Description string    `json:"description" binding:"required"`
 	Price       int       `json:"price" binding:"required"`
 	Phone       string    `json:"phone" binding:"required"`
+	IsActive    bool      `json:"is_active"`
 	Banner      string    `json:"banner" binding:"required"`
 	Photos      []string  `json:"photos" binding:"required"`
 	AuthorID    int64     `json:"author_id" binding:"required"`
@@ -23,6 +24,7 @@ type User struct {
 	ID        int64     `json:"id"`
 	Name      string    `json:"name" binding:"required"`
 	Biography string    `json:"biography"`
+	IsActive  bool      `json:"is_active"`
 	Premium   bool      `json:"premium"`
 	Phone     string    `json:"phone" binding:"required"`
 	CountryID int64     `json:"country_id" binding:"required"`
@@ -61,6 +63,7 @@ type Category struct {
 type Billing struct {
 	ID          int64     `json:"id"`
 	Label       string    `json:"label" binding:"required"`
+	Reference   string    `json:"reference" binding:"required"`
 	Price       int64     `json:"price" binding:"required"`
 	UserID      int64     `json:"user_id" binding:"required"`
 	PaymentDate time.Time `json:"payment_date"`

@@ -73,6 +73,7 @@ func createTales() {
 			biography VARCHAR(255),
 			premium TINYINT DEFAULT 0 NOT NULL,
 			phone VARCHAR(13) NOT NULL,
+			is_active TINYINT DEFAULT 1 NOT NULL,
 			country_id INTEGER NOT NULL,
 			city_id INTEGER NOT NULL,
 			photo TEXT,
@@ -102,7 +103,8 @@ func createTales() {
 
 		`CREATE TABLE IF NOT EXISTS billing (
 			id INTEGER NOT NULL PRIMARY KEY AUTO_INCREMENT,
-			label VARCHAR(255) NOT NULL,
+			label VARCHAR(30) NOT NULL,
+			reference VARCHAR(30) NOT NULL,
 			price INTEGER NOT NULL,
 			user_id INTEGER NOT NULL,
 			FOREIGN KEY (user_id) REFERENCES users(id) 
@@ -117,6 +119,7 @@ func createTales() {
 			title VARCHAR(255) NOT NULL,
 			description TEXT NOT NULL,
 			price INTEGER NOT NULL,
+			is_active TINYINT DEFAULT 1 NOT NULL,
 			phone VARCHAR(15) NOT NULL,
 			banner TEXT NOT NULL,
 			photos JSON NOT NULL,
