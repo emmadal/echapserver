@@ -25,18 +25,26 @@ func getCategories(context *gin.Context) {
 
 func createCategory(context *gin.Context) {
 	userID := context.GetInt64("userID")
-
 	var category models.Category
 	category.UserID = userID
 
-	err := context.ShouldBindJSON(&category)
-	if err != nil {
-		context.SecureJSON(http.StatusBadRequest, gin.H{"message": "Bad request", "success": false})
+	if err := context.ShouldBindJSON(&category); err != nil {
+		context.SecureJSON(http.StatusBadRequest, gin.H{
+			"message": "Bad request",
+			"success": false,
+		})
 		return
 	}
 
-	err = models.CreateCategory(category)
-	if err != nil {
+	if user, _ := models.FindUserByID(userID); !user.Role {
+		context.SecureJSON(http.StatusForbidden, gin.H{
+			"message": "You're not authorized to create a category",
+			"success": false,
+		})
+		return
+	}
+
+	if err := models.CreateCategory(category); err != nil {
 		context.SecureJSON(http.StatusInternalServerError, gin.H{
 			"message": "Unable to create data",
 			"success": false,

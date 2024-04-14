@@ -4,7 +4,7 @@ import "echapserver/db"
 
 // GetAllCategories return the list of categories
 func GetAllCategories() ([]Category, error) {
-	rows, err := db.DB.Query("SELECT id, title FROM category ORDER BY title")
+	rows, err := db.DB.Query("SELECT id, title FROM category WHERE is_active = 1 ORDER BY title")
 	defer rows.Close()
 	if err != nil {
 		return nil, err
@@ -42,7 +42,7 @@ func CreateCategory(category Category) error {
 
 // GetCategoryByID get a category
 func GetCategoryByID(categoryID int64) (*Category, error) {
-	query := `SELECT id, title, user_id FROM category WHERE ID = ?`
+	query := `SELECT id, title, user_id FROM category WHERE ID = ? AND is_active = 1`
 	rows := db.DB.QueryRow(query, categoryID)
 	var category Category
 
@@ -55,7 +55,7 @@ func GetCategoryByID(categoryID int64) (*Category, error) {
 
 // UpdateCategory update a category
 func UpdateCategory(category Category) error {
-	query := `UPDATE category SET title = ? WHERE id = ?`
+	query := `UPDATE category SET title = ? WHERE id = ? AND is_active = 1`
 	stmt, err := db.DB.Prepare(query)
 	defer stmt.Close()
 	if err != nil {
@@ -68,7 +68,7 @@ func UpdateCategory(category Category) error {
 
 // DeleteCategory delete a category
 func DeleteCategory(categoryID int64) error {
-	query := `DELETE FROM category WHERE ID = ?`
+	query := `UPDATE category set is_active = 0 WHERE ID = ?`
 	stmt, err := db.DB.Prepare(query)
 	defer stmt.Close()
 	if err != nil {
