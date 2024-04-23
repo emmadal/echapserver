@@ -109,3 +109,16 @@ type Subscription struct {
 	Premium bool  `json:"premium"`
 	UserID  int64 `json:"user_id" binding:"required"`
 }
+
+// Issues struct
+type Issues struct {
+	ID          int64     `json:"id"`
+	Name        string    `json:"name" binding:"required"`
+	Subject      string    `json:"subject" binding:"required"`
+	Description string    `json:"description" binding:"required"`
+	UserID      int64     `json:"user_id" binding:"required"`
+	UserName    string    `json:"user_name" binding:"required"`
+	Phone       string    `json:"phone" binding:"required"`
+	TicketRef   string    `json:"ticket_ref"`
+	CreatedAt   time.Time `json:"created_at"`
+}

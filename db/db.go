@@ -155,6 +155,21 @@ func createTales() {
 			ON DELETE CASCADE,
 			created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 		)`,
+
+		`CREATE TABLE IF NOT EXISTS issues (
+			id INTEGER NOT NULL PRIMARY KEY AUTO_INCREMENT,
+			name VARCHAR(100) NOT NULL,
+			subject VARCHAR(100) NOT NULL,
+			user_name VARCHAR(100) NOT NULL,
+			phone VARCHAR(10) NOT NULL,
+			ticket_ref VARCHAR(20) NOT NULL,
+			user_id INTEGER NOT NULL,
+			FOREIGN KEY (user_id) REFERENCES users(id) 
+			ON UPDATE CASCADE
+			ON DELETE CASCADE,
+			description TEXT NOT NULL,
+			created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+		)`,
 	}
 	for _, value := range queries {
 		_, err := DB.Exec(value)

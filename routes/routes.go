@@ -36,6 +36,9 @@ func RegisterRoutes(server *gin.Engine) {
 	// Subscription
 	authenticated.POST("/subscription", subscription)
 
+	// Issues
+	authenticated.POST("/report-issues", reportIssues)
+
 	// No need authentication
 	server.GET("/categories", getCategories)
 	server.GET("/category/:id", getCategoryByID)
