@@ -1,0 +1,11 @@
+/.git
+/.idea
+/.vscode
+/vendor
+/bin
+/pkg
+/*.test
+/*.prof
+/.DS_Store
+/api_request
+*.exe
