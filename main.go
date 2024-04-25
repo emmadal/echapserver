@@ -5,16 +5,19 @@ import (
 	"echapserver/routes"
 	"log"
 	"os"
-
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
-var mode = os.Getenv("GIN_MODE")
-
 func main() {
-	db.InitDB()             // Database initialization
-	server := gin.Default() // Server initialization
-	gin.SetMode(mode)       // set the running mode (debug/production)
+	db.InitDB()                  // Database initialization
+	gin.SetMode(gin.ReleaseMode) // set the running mode (debug/production)
+	server := gin.Default()      // Server initialization
+	server.Use(cors.New(cors.Config{
+		AllowOrigins: []string{"*"},
+		AllowMethods: []string{"GET", "POST", "PUT", "DELETE"},
+		AllowHeaders: []string{"accept", "content-type", "multipart/form-data"},
+	}))
 
 	port := os.Getenv("PORT")
 
