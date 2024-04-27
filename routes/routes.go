@@ -39,6 +39,9 @@ func RegisterRoutes(server *gin.Engine) {
 	// Issues
 	authenticated.POST("/report-issues", reportIssues)
 
+	// Search
+	authenticated.GET("/search", searchArticle)
+
 	// No need authentication
 	server.GET("/categories", getCategories)
 	server.GET("/category/:id", getCategoryByID)
