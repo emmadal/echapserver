@@ -54,24 +54,19 @@ func LoginUser(u AuthStruct) (*User, error) {
 func FindUserByID(id int64) (*User, error) {
 	query := "SELECT * FROM users WHERE id = ?"
 	row := db.DB.QueryRow(query, id)
-
-	var biography, whatsapp, photo, tiktok, instagram sql.NullString
-
+	var biography, photo, whatsapp, tiktok, instagram sql.NullString
 	var user User
-	err := row.Scan(&user.ID, &user.Name, &biography, &user.Premium, &user.Phone, &user.IsActive, &user.Role, &user.CountryID, &user.CityID, &photo, &whatsapp, &tiktok, &instagram, &user.CreatedAt)
 
-	if !biography.Valid || !whatsapp.Valid || !tiktok.Valid || !instagram.Valid {
-		user.Biography = ""
-		user.Photo = ""
-		user.Whatsapp = ""
-		user.TikTok = ""
-		user.Instagram = ""
-	}
-
-	if err != nil {
+	if err := row.Scan(&user.ID, &user.Name, &biography, &user.Premium, &user.Phone, &user.IsActive, &user.Role, &user.CountryID, &user.CityID, &photo, &whatsapp, &tiktok, &instagram, &user.CreatedAt); err != nil {
 		return nil, err
 	}
-
+	if biography.Valid || photo.Valid || whatsapp.Valid || tiktok.Valid || instagram.Valid {
+		user.Biography = biography.String
+		user.Photo = photo.String
+		user.Whatsapp = whatsapp.String
+		user.TikTok = tiktok.String
+		user.Instagram = instagram.String
+	}
 	return &user, nil
 }
 
