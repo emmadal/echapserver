@@ -23,6 +23,10 @@ _testmain.go
 
 /api_request
 
+/.idea
+
+/.vscode
+
 /VERSION.cache
 /bin/
 /build.out
