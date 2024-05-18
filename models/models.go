@@ -8,6 +8,7 @@ type Article struct {
 	Title       string    `json:"title" binding:"required"`
 	Description string    `json:"description" binding:"required"`
 	Price       int       `json:"price" binding:"required"`
+	Delivery    int       `json:"delivery" binding:"required"`
 	Phone       string    `json:"phone" binding:"required"`
 	IsActive    bool      `json:"is_active"`
 	Banner      string    `json:"banner" binding:"required"`
@@ -114,7 +115,7 @@ type Subscription struct {
 type Issues struct {
 	ID          int64     `json:"id"`
 	Name        string    `json:"name" binding:"required"`
-	Subject      string    `json:"subject" binding:"required"`
+	Subject     string    `json:"subject" binding:"required"`
 	Description string    `json:"description" binding:"required"`
 	UserID      int64     `json:"user_id" binding:"required"`
 	UserName    string    `json:"user_name" binding:"required"`

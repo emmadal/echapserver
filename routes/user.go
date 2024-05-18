@@ -24,7 +24,7 @@ func register(context *gin.Context) {
 	}
 	if err = models.CreateUser(user); err != nil {
 		context.SecureJSON(http.StatusInternalServerError, gin.H{
-			"message": "Unable to create new account",
+			"message": "Phone number or Name already exist",
 			"success": false,
 		})
 		return

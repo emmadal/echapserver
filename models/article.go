@@ -8,7 +8,7 @@ import (
 
 // CreateArticle create article
 func CreateArticle(article Article) error {
-	query := `INSERT INTO article(title, description, price, phone, banner, photos, author_id, category_id, country_id, city_id) VALUES (?,?,?,?,?,?,?,?,?,?)`
+	query := `INSERT INTO article(title, description, price, delivery, phone, banner, photos, author_id, category_id, country_id, city_id) VALUES (?,?,?,?,?,?,?,?,?,?,?)`
 
 	stmt, err := db.DB.Prepare(query)
 	defer stmt.Close()
@@ -21,7 +21,7 @@ func CreateArticle(article Article) error {
 		return err
 	}
 
-	result, err := stmt.Exec(article.Title, article.Description, article.Price, article.Phone, article.Banner, photos, article.AuthorID, article.CategoryID, article.CountryID, article.CityID)
+	result, err := stmt.Exec(article.Title, article.Description, article.Price, article.Delivery, article.Phone, article.Banner, photos, article.AuthorID, article.CategoryID, article.CountryID, article.CityID)
 
 	if err != nil {
 		return err
@@ -49,7 +49,7 @@ func GetAllArticle(articleID string) ([]Article, error) {
 
 	for rows.Next() {
 		var item Article
-		err := rows.Scan(&item.ID, &item.Title, &item.Description, &item.Price, &item.IsActive, &item.Phone, &item.Banner, &photos, &item.AuthorID, &item.CategoryID, &item.CountryID, &item.CityID, &item.CreatedAt)
+		err := rows.Scan(&item.ID, &item.Title, &item.Description, &item.Price, &item.Delivery, &item.IsActive, &item.Phone, &item.Banner, &photos, &item.AuthorID, &item.CategoryID, &item.CountryID, &item.CityID, &item.CreatedAt)
 		if err != nil {
 			return nil, err
 		}
@@ -72,7 +72,7 @@ func FindArticleByID(articleID int64) (*Article, error) {
 	var item Article
 	var photos []byte
 
-	err := row.Scan(&item.ID, &item.Title, &item.Description, &item.Price, &item.IsActive, &item.Phone, &item.Banner, &photos, &item.AuthorID, &item.CategoryID, &item.CountryID, &item.CityID, &item.CreatedAt)
+	err := row.Scan(&item.ID, &item.Title, &item.Description, &item.Price, &item.Delivery, &item.IsActive, &item.Phone, &item.Banner, &photos, &item.AuthorID, &item.CategoryID, &item.CountryID, &item.CityID, &item.CreatedAt)
 	if err != nil {
 		return nil, err
 	}
@@ -112,7 +112,7 @@ func GetArticlesByUser(userID, page int64) ([]Article, error) {
 
 	for rows.Next() {
 		var item Article
-		err := rows.Scan(&item.ID, &item.Title, &item.Description, &item.Price, &item.IsActive, &item.Phone, &item.Banner, &photos, &item.AuthorID, &item.CategoryID, &item.CountryID, &item.CityID, &item.CreatedAt)
+		err := rows.Scan(&item.ID, &item.Title, &item.Description, &item.Price, &item.Delivery, &item.IsActive, &item.Phone, &item.Banner, &photos, &item.AuthorID, &item.CategoryID, &item.CountryID, &item.CityID, &item.CreatedAt)
 		if err != nil {
 			return nil, err
 		}

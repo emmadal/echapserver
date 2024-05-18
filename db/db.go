@@ -3,7 +3,7 @@ package db
 import (
 	"database/sql"
 	"fmt"
-	"log"
+
 	"os"
 	"time"
 
@@ -16,12 +16,8 @@ var DB *sql.DB
 
 // InitDB initialize database
 func InitDB() {
-	defer recoverDB()
-
-	err := godotenv.Load(".env")
-
-	if err != nil {
-		log.Fatalln(err)
+	if err := godotenv.Load(".env"); err != nil {
+		panic(err)
 	}
 
 	username := os.Getenv("USERNAME")
@@ -35,7 +31,7 @@ func InitDB() {
 	DB = db
 
 	if err != nil {
-		log.Fatalln(err)
+		panic(err)
 	}
 
 	// See "Important settings" section.
@@ -47,8 +43,10 @@ func InitDB() {
 }
 
 func createTales() {
-	defer recoverTable()
+	start := time.Now()
+
 	queries := []string{
+
 		`CREATE TABLE IF NOT EXISTS country (
 			id INTEGER NOT NULL PRIMARY KEY AUTO_INCREMENT,
 			label VARCHAR(100) NOT NULL,
@@ -60,7 +58,7 @@ func createTales() {
 			id INTEGER NOT NULL PRIMARY KEY AUTO_INCREMENT,
 			label VARCHAR(100) NOT NULL,
 			country_id INTEGER NOT NULL,
-			FOREIGN KEY (country_id) REFERENCES country(id) 
+			FOREIGN KEY (country_id) REFERENCES country(id)
 			ON UPDATE CASCADE
 			ON DELETE CASCADE,
 			created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -72,19 +70,19 @@ func createTales() {
 			name VARCHAR(100) NOT NULL,
 			biography VARCHAR(200),
 			premium TINYINT DEFAULT 0 NOT NULL,
-			phone VARCHAR(10) NOT NULL,
+			phone VARCHAR(20) NOT NULL,
 			role TINYINT DEFAULT 0 NOT NULL,
 			is_active TINYINT DEFAULT 1 NOT NULL,
 			country_id INTEGER NOT NULL,
 			city_id INTEGER NOT NULL,
 			photo TEXT,
-			whatsapp VARCHAR(15),
-			tiktok TEXT,
-			instagram TEXT,
-			FOREIGN KEY (city_id) REFERENCES city(id) 
+			whatsapp VARCHAR(20),
+			tiktok VARCHAR(150),
+			instagram VARCHAR(150),
+			FOREIGN KEY (city_id) REFERENCES city(id)
 			ON UPDATE CASCADE
 			ON DELETE CASCADE,
-			FOREIGN KEY (country_id) REFERENCES country(id) 
+			FOREIGN KEY (country_id) REFERENCES country(id)
 			ON UPDATE CASCADE
 			ON DELETE CASCADE,
 			created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -96,7 +94,7 @@ func createTales() {
 			title VARCHAR(100) NOT NULL,
 			is_active TINYINT DEFAULT 1 NOT NULL,
 			user_id INTEGER NOT NULL,
-			FOREIGN KEY (user_id) REFERENCES users(id) 
+			FOREIGN KEY (user_id) REFERENCES users(id)
 			ON UPDATE CASCADE
 			ON DELETE CASCADE,
 			created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -109,7 +107,7 @@ func createTales() {
 			reference VARCHAR(30) NOT NULL,
 			price INTEGER NOT NULL,
 			user_id INTEGER NOT NULL,
-			FOREIGN KEY (user_id) REFERENCES users(id) 
+			FOREIGN KEY (user_id) REFERENCES users(id)
 			ON UPDATE CASCADE
 			ON DELETE CASCADE,
 			payment_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -121,24 +119,25 @@ func createTales() {
 			title VARCHAR(255) NOT NULL,
 			description TEXT NOT NULL,
 			price INTEGER NOT NULL,
+			delivery INTEGER NOT NULL,
 			is_active TINYINT DEFAULT 1 NOT NULL,
 			phone VARCHAR(15) NOT NULL,
 			banner TEXT NOT NULL,
 			photos JSON NOT NULL,
 			author_id  INTEGER NOT NULL,
-			FOREIGN KEY (author_id) REFERENCES users(id) 
+			FOREIGN KEY (author_id) REFERENCES users(id)
 			ON UPDATE CASCADE
 			ON DELETE CASCADE,
 			category_id INTEGER NOT NULL,
-			FOREIGN KEY (category_id) REFERENCES category(id) 
+			FOREIGN KEY (category_id) REFERENCES category(id)
 			ON UPDATE CASCADE
 			ON DELETE CASCADE,
 			country_id INTEGER NOT NULL,
-			FOREIGN KEY (country_id) REFERENCES country(id) 
+			FOREIGN KEY (country_id) REFERENCES country(id)
 			ON UPDATE CASCADE
 			ON DELETE CASCADE,
 			city_id INTEGER NOT NULL,
-			FOREIGN KEY (city_id) REFERENCES city(id) 
+			FOREIGN KEY (city_id) REFERENCES city(id)
 			ON UPDATE CASCADE
 			ON DELETE CASCADE,
 			created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -150,7 +149,7 @@ func createTales() {
 			is_used TINYINT DEFAULT 0 NOT NULL,
 			expiration TIMESTAMP,
 			user_id INTEGER NOT NULL,
-			FOREIGN KEY (user_id) REFERENCES users(id) 
+			FOREIGN KEY (user_id) REFERENCES users(id)
 			ON UPDATE CASCADE
 			ON DELETE CASCADE,
 			created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -161,21 +160,34 @@ func createTales() {
 			name VARCHAR(100) NOT NULL,
 			subject VARCHAR(100) NOT NULL,
 			user_name VARCHAR(100) NOT NULL,
-			phone VARCHAR(10) NOT NULL,
+			phone VARCHAR(20) NOT NULL,
 			ticket_ref VARCHAR(20) NOT NULL,
 			user_id INTEGER NOT NULL,
-			FOREIGN KEY (user_id) REFERENCES users(id) 
+			FOREIGN KEY (user_id) REFERENCES users(id)
 			ON UPDATE CASCADE
 			ON DELETE CASCADE,
 			description TEXT NOT NULL,
 			created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 		)`,
+
+		`CREATE TABLE IF NOT EXISTS chats (
+			id INTEGER NOT NULL PRIMARY KEY AUTO_INCREMENT,
+			message TEXT NOT NULL,
+			sender_id INTEGER NOT NULL,
+			FOREIGN KEY (sender_id) REFERENCES users(id)
+			ON UPDATE CASCADE
+			ON DELETE CASCADE,
+			receiver_id INTEGER NOT NULL,
+			FOREIGN KEY (receiver_id) REFERENCES users(id)
+			ON UPDATE CASCADE
+			ON DELETE CASCADE,
+			created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+		)`,
 	}
 	for _, value := range queries {
-		_, err := DB.Exec(value)
-		if err != nil {
+		if _, err := DB.Exec(value); err != nil {
 			panic(err)
 		}
 	}
-	fmt.Println("Database creation in:", time.Since(time.Now()))
+	fmt.Println("Executed in:", time.Since(start))
 }

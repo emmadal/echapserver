@@ -27,7 +27,7 @@ func CreateUser(user User) error {
 
 // LoginUser sign in user
 func LoginUser(u AuthStruct) (*User, error) {
-	query := "SELECT * FROM users WHERE phone = ?"
+	query := "SELECT * FROM users WHERE phone = ? AND is_active = 1"
 	row := db.DB.QueryRow(query, u.Phone)
 
 	var biography, whatsapp, photo, tiktok, instagram sql.NullString
