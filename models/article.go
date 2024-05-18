@@ -4,7 +4,6 @@ import (
 	"database/sql"
 	"echapserver/db"
 	"encoding/json"
-	"strconv"
 )
 
 // CreateArticle create article
@@ -100,9 +99,8 @@ func DeleteArticle(articleID int64) error {
 
 // GetArticlesByUser fetch all articles by userID
 func GetArticlesByUser(userID, page int64) ([]Article, error) {
-	perPage, _ := strconv.ParseInt("10", 10, 64)
-	query := `SELECT * FROM ARTICLE WHERE author_id = ? AND is_active = 1 ORDER BY created_at DESC LIMIT ? OFFSET ?`
-	rows, err := db.DB.Query(query, userID, perPage, (page-1)*perPage)
+	query := `SELECT * FROM ARTICLE WHERE author_id = ? AND is_active = 1 ORDER BY created_at DESC LIMIT 15 OFFSET ?`
+	rows, err := db.DB.Query(query, userID, (page-1)*15)
 	defer rows.Close()
 
 	if err != nil {
@@ -119,8 +117,7 @@ func GetArticlesByUser(userID, page int64) ([]Article, error) {
 			return nil, err
 		}
 
-		err = json.Unmarshal(photos, &item.Photos)
-		if err != nil {
+		if err = json.Unmarshal(photos, &item.Photos); err != nil {
 			return nil, err
 		}
 

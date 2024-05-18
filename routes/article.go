@@ -121,7 +121,7 @@ func getArticleByUser(context *gin.Context) {
 
 	if err != nil {
 		context.SecureJSON(http.StatusBadRequest, gin.H{
-			"message": err.Error(),
+			"message": "Bad request",
 			"success": false,
 		})
 		return
